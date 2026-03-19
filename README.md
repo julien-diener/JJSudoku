@@ -9,6 +9,42 @@ This project is a minimal Android Sudoku template using Kotlin with a shared pur
 - No tracking SDKs, no ads, no cloud/account requirements
 - Shared game logic (`core-game`) ready for future iOS reuse
 
+## Setup / Prerequisites
+
+To build and run this project on your machine, you need:
+
+### Required
+
+1. **Java Development Kit (JDK) 17 or later**
+   - Download from https://www.oracle.com/java/technologies/downloads/
+   - Or use a package manager: `sudo apt install openjdk-17-jdk` (Linux), `brew install openjdk@17` (macOS)
+
+2. **Android SDK**
+   - Download Android Studio from https://developer.android.com/studio
+   - Or install just the SDK tools
+   - Required API level: 26 (minSdk)
+
+3. **Git**
+   - Clone this repository: `git clone https://github.com/julien-diener/JJSudoku.git`
+
+### Configuration
+
+After cloning, create `local.properties` in the project root:
+
+```properties
+sdk.dir=/path/to/your/Android/Sdk
+```
+
+Replace `/path/to/your/Android/Sdk` with your actual Android SDK location:
+- **Linux/macOS**: typically `~/Android/Sdk`
+- **Windows**: typically `C:\Users\<YourUser>\AppData\Local\Android\Sdk`
+
+### Optional
+
+- **Android Emulator** (to run the app without a physical phone)
+  - Set up via Android Studio AVD Manager
+  - Or use a connected Android phone with USB debugging enabled
+
 ## Modules
 
 - `app`: Android app module (Activity + XML UI)
