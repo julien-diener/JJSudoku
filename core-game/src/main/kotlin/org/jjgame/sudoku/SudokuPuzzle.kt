@@ -22,9 +22,23 @@ data class SudokuPuzzle(
         require(cells.size == 81) { "cells must have 81 values" }
     }
 
-    fun cellAt(row: Int, col: Int): SudokuCell = cells[row * 9 + col]
-
     fun cellAt(index: CellIndex): SudokuCell = cells[index.value]
+
+    fun switchCandidate(index: CellIndex, value: Int): SudokuPuzzle {
+        require(value in 1..9) { "value must be between 1 and 9" }
+
+        val currentCell = cellAt(index)
+        if (currentCell.state.isFixed()) {
+            return this
+        }
+
+        val updatedCandidateValues = currentCell.candidateValues.copyOf()
+        updatedCandidateValues[value - 1] = !updatedCandidateValues[value - 1]
+
+        val updatedCells = cells.copyOf()
+        updatedCells[index.value] = currentCell.copy(candidateValues = updatedCandidateValues)
+        return copy(cells = updatedCells)
+    }
 
     fun setValue(index: CellIndex, value: Int): SetCellValueResult {
         if (value !in 1..9) {
@@ -44,8 +58,6 @@ data class SudokuPuzzle(
         return SetCellValueResult.Success(copy(cells = updatedCells))
     }
 
-    fun isFixed(row: Int, col: Int): Boolean = cellAt(row, col).state.isFixed()
-
     fun asPrettyString(): String = buildString {
         for (row in 0 until 9) {
             if (row != 0 && row % 3 == 0) {
@@ -55,7 +67,7 @@ data class SudokuPuzzle(
                 if (col != 0 && col % 3 == 0) {
                     append("| ")
                 }
-                val value = cellAt(row, col).value
+                val value = cellAt(CellIndex(row, col)).value
                 append(if (value == 0) ". " else "$value ")
             }
             appendLine()

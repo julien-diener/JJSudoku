@@ -20,13 +20,15 @@ class SudokuBoardView @JvmOverloads constructor(
 ) : View(context, attrs, defStyle) {
 
     // ── State ─────────────────────────────────────────────────────────────────
-    var gameSession: SudokuGameSession? = null
-        set(value) {
-            field = value
-            invalidate()
-        }
+    private var gameSession: SudokuGameSession? = null
+    private var onSessionChanged: (() -> Unit)? = null
+    private var editCandidateMode = false
 
-    var onSessionChanged: (() -> Unit)? = null
+    fun init(session: SudokuGameSession?, callback: (() -> Unit)?) {
+        gameSession = session
+        onSessionChanged = callback
+        invalidate()
+    }
 
     // ── Paints ────────────────────────────────────────────────────────────────
     private val paintBackground = Paint().apply { color = Color.WHITE }
@@ -46,6 +48,14 @@ class SudokuBoardView @JvmOverloads constructor(
 
     private val paintGivenDigit = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.BLACK
+        textAlign = Paint.Align.CENTER
+    }
+    private val paintCandidateDigit = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = paintGivenDigit.color
+        textAlign = Paint.Align.CENTER
+    }
+    private val paintCandidateEditDigit = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = "#F57C00".toColorInt()
         textAlign = Paint.Align.CENTER
     }
     private val paintUserDigit = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -73,6 +83,8 @@ class SudokuBoardView @JvmOverloads constructor(
         paintGivenDigit.textSize = textSize
         paintUserDigit.textSize  = textSize
         paintErrorDigit.textSize = textSize
+        paintCandidateDigit.textSize = cellSize * 0.22f
+        paintCandidateEditDigit.textSize = cellSize * 0.22f
     }
 
     // ── Drawing ───────────────────────────────────────────────────────────────
@@ -91,18 +103,24 @@ class SudokuBoardView @JvmOverloads constructor(
                      else paintBackground
             canvas.drawRect(rect, bg)
 
-            // Digit
-            val value = displayedValue(renderState)
-            if (value != 0) {
-                val textPaint = when {
-                    renderState.errorValue != null -> paintErrorDigit
-                    renderState.cell.state == CellState.FOUND -> paintUserDigit
-                    renderState.cell.state == CellState.GIVEN -> paintGivenDigit
-                    else -> paintErrorDigit // should not happen
+            // Digit / candidates
+            when {
+                renderState.errorValue != null -> {
+                    drawBigDigit(canvas, rect, renderState.errorValue!!, paintErrorDigit)
                 }
-                val x = rect.left + cellSize / 2f
-                val y = rect.top + cellSize / 2f - (textPaint.descent() + textPaint.ascent()) / 2f
-                canvas.drawText(value.toString(), x, y, textPaint)
+                renderState.cell.state == CellState.NOT_FOUND -> {
+                    drawCandidateValues(
+                        canvas = canvas,
+                        rect = rect,
+                        candidateValues = renderState.cell.candidateValues,
+                        selectedValue = session.selectedNumber,
+                    )
+                }
+                else -> {
+                    val textPaint = if (renderState.cell.state == CellState.GIVEN) paintGivenDigit
+                                    else paintUserDigit
+                    drawBigDigit(canvas, rect, renderState.cell.value, textPaint)
+                }
             }
         }
 
@@ -122,7 +140,7 @@ class SudokuBoardView @JvmOverloads constructor(
         val col = (event.x / cellSize).toInt().coerceIn(0, 8)
         val row = (event.y / cellSize).toInt().coerceIn(0, 8)
         val idx = CellIndex(row, col)
-        session.clickCell(idx)
+        session.clickCell(idx, editCandidate = editCandidateMode)
         performClick()
         onSessionChanged?.invoke()
         invalidate()
@@ -140,6 +158,11 @@ class SudokuBoardView @JvmOverloads constructor(
         invalidate()
     }
 
+    fun setEditCandidateMode(enabled: Boolean) {
+        editCandidateMode = enabled
+        invalidate()
+    }
+
     fun clearSelection() {
         gameSession?.selectedNumber = null
         gameSession?.cellError = null
@@ -148,7 +171,7 @@ class SudokuBoardView @JvmOverloads constructor(
 
     fun isSolved(): Boolean {
         val s = gameSession ?: return false
-        return s.cellError == null && s.puzzle.cells.all { it.state.isFixed() && it.value != 0 }
+        return s.cellError == null && s.puzzle.cells.all { it.state.isFixed() }
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
@@ -157,12 +180,46 @@ class SudokuBoardView @JvmOverloads constructor(
         (col + 1) * cellSize, (row + 1) * cellSize,
     )
 
-    private fun displayedValue(renderState: org.jjgame.sudoku.RenderCell): Int {
-        renderState.errorValue?.let { return it }
-        return when (renderState.cell.state) {
-            CellState.NOT_FOUND -> 0
-            else -> renderState.cell.value
+    private fun drawBigDigit(canvas: Canvas, rect: RectF, value: Int, paint: Paint) {
+        val x = rect.left + cellSize / 2f
+        val y = rect.top + cellSize / 2f - (paint.descent() + paint.ascent()) / 2f
+        canvas.drawText(value.toString(), x, y, paint)
+    }
+
+    private fun drawCandidateValues(
+        canvas: Canvas,
+        rect: RectF,
+        candidateValues: BooleanArray,
+        selectedValue: Int?,
+    ) {
+        val candidatePaint = if (editCandidateMode) paintCandidateEditDigit else paintCandidateDigit
+        val inset = cellSize * 0.05f
+        val innerLeft   = rect.left   + inset
+        val innerTop    = rect.top    + inset
+        val innerWidth  = rect.width()  - inset * 2
+        val innerHeight = rect.height() - inset * 2
+        val miniCellW = innerWidth  / 3f
+        val miniCellH = innerHeight / 3f
+
+        for (i in 0 until 9) {
+            if (!candidateValues[i]) continue
+            val miniRow = i / 3
+            val miniCol = i % 3
+            if (selectedValue == i + 1) {
+                val miniRect = RectF(
+                    innerLeft + miniCol * miniCellW,
+                    innerTop + miniRow * miniCellH,
+                    innerLeft + (miniCol + 1) * miniCellW,
+                    innerTop + (miniRow + 1) * miniCellH,
+                )
+                canvas.drawRect(miniRect, paintSelected)
+            }
+            val x = innerLeft + (miniCol + 0.5f) * miniCellW
+            val y = innerTop  + (miniRow + 0.5f) * miniCellH -
+                    (candidatePaint.descent() + candidatePaint.ascent()) / 2f
+            canvas.drawText((i + 1).toString(), x, y, candidatePaint)
         }
     }
+
 }
 

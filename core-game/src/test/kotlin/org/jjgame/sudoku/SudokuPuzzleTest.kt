@@ -6,6 +6,29 @@ import kotlin.test.assertIs
 
 class SudokuPuzzleTest {
     @Test
+    fun `switchCandidate toggles candidate value on editable cell`() {
+        val index = CellIndex(0, 0)
+        val puzzle = puzzleWithEditableCell(index = index, value = 5)
+
+        val toggledOff = puzzle.switchCandidate(index, 3)
+        val toggledOnAgain = toggledOff.switchCandidate(index, 3)
+
+        assertEquals(false, toggledOff.cellAt(index).candidateValues[2])
+        assertEquals(true, toggledOnAgain.cellAt(index).candidateValues[2])
+        assertEquals(true, puzzle.cellAt(index).candidateValues[2])
+    }
+
+    @Test
+    fun `switchCandidate keeps fixed cell unchanged`() {
+        val index = CellIndex(1, 1)
+        val puzzle = puzzleWithCell(index = index, value = 4, state = CellState.GIVEN)
+
+        val updated = puzzle.switchCandidate(index, 4)
+
+        assertEquals(puzzle, updated)
+    }
+
+    @Test
     fun `setValue returns updated puzzle with FOUND state when value is correct`() {
         val index = CellIndex(0, 0)
         val puzzle = puzzleWithEditableCell(index = index, value = 5)

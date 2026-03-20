@@ -48,6 +48,23 @@ class SudokuGameSessionTest {
     }
 
     @Test
+    fun `clickCell in candidate mode toggles candidate and keeps selected number`() {
+        val editableIndex = CellIndex(3, 4)
+        val controller = SudokuGameSession(
+            puzzle = puzzleWithSingleEditableCell(editableIndex = editableIndex, editableValue = 8),
+        )
+        controller.selectNumber(6)
+        controller.cellError = CellError(CellIndex(0, 0), 1)
+
+        controller.clickCell(editableIndex, editCandidate = true)
+
+        assertEquals(6, controller.selectedNumber)
+        assertNull(controller.cellError)
+        assertEquals(false, controller.puzzle.cellAt(editableIndex).candidateValues[5])
+        assertEquals(CellState.NOT_FOUND, controller.puzzle.cellAt(editableIndex).state)
+    }
+
+    @Test
     fun `clickCell sets cellError and unsets selected number when value is incorrect`() {
         val editableIndex = CellIndex(4, 4)
         val controller = SudokuGameSession(
@@ -76,6 +93,21 @@ class SudokuGameSessionTest {
         assertNull(controller.selectedNumber)
         assertNull(controller.cellError)
         assertEquals(CellState.NOT_FOUND, controller.puzzle.cellAt(editableIndex).state)
+    }
+
+    @Test
+    fun `clickCell in candidate mode does nothing when no selected number`() {
+        val editableIndex = CellIndex(5, 6)
+        val controller = SudokuGameSession(
+            puzzle = puzzleWithSingleEditableCell(editableIndex = editableIndex, editableValue = 9),
+        )
+        val before = controller.puzzle
+
+        controller.clickCell(editableIndex, editCandidate = true)
+
+        assertEquals(before, controller.puzzle)
+        assertNull(controller.selectedNumber)
+        assertNull(controller.cellError)
     }
 
     @Test
@@ -110,7 +142,7 @@ class SudokuGameSessionTest {
             puzzle = puzzleWithSingleEditableCell(editableIndex = CellIndex(0, 0), editableValue = 5),
         )
 
-        controller.selectNumber(5);
+        controller.selectNumber(5)
 
         val cells = controller.parseGridCells()
 

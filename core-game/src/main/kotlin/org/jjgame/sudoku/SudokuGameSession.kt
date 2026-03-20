@@ -31,7 +31,7 @@ class SudokuGameSession(
 
     var cellError: CellError? = null
 
-    fun clickCell(index: CellIndex) {
+    fun clickCell(index: CellIndex, editCandidate: Boolean = false) {
         val cell = puzzle.cellAt(index)
         if (cell.state.isFixed()) {
             selectedNumber = cell.value
@@ -40,6 +40,12 @@ class SudokuGameSession(
         }
 
         val currentSelectedNumber = selectedNumber ?: return
+
+        if (editCandidate) {
+            puzzle = puzzle.switchCandidate(index, currentSelectedNumber)
+            cellError = null
+            return
+        }
 
         when (val setValueResult = puzzle.setValue(index, currentSelectedNumber)) {
             is SetCellValueResult.Success -> {
@@ -67,7 +73,7 @@ class SudokuGameSession(
         val cell = puzzle.cellAt(index)
         val error = cellError
         val errorValue = if (error?.index == index) error.value else null
-        val selected = cell.state.isFixed() && cell.value == selectedNumber;
+        val selected = cell.state.isFixed() && cell.value == selectedNumber
         RenderCell(index = index, cell = cell, selected, errorValue = errorValue)
     }
 

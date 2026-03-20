@@ -28,12 +28,12 @@ data class CellIndex(
 data class SudokuCell(
     val value: Int,
     val state: CellState,
-    val possibleValues: BooleanArray = BooleanArray(9) { true },
+    val candidateValues: BooleanArray = BooleanArray(9) { true },
 ) {
     init {
         require(value in 0..9) { "value must be between 0 and 9" }
-        require(possibleValues.size == 9) {
-            "possibleValues must contain 9 flags"
+        require(candidateValues.size == 9) {
+            "candidateValues must contain 9 flags"
         }
     }
 
@@ -45,7 +45,7 @@ data class SudokuCell(
 
         if (value != other.value) return false
         if (state != other.state) return false
-        if (!possibleValues.contentEquals(other.possibleValues)) return false
+        if (!candidateValues.contentEquals(other.candidateValues)) return false
 
         return true
     }
@@ -53,7 +53,7 @@ data class SudokuCell(
     override fun hashCode(): Int {
         var result = value
         result = 31 * result + state.hashCode()
-        result = 31 * result + possibleValues.contentHashCode()
+        result = 31 * result + candidateValues.contentHashCode()
         return result
     }
 }
