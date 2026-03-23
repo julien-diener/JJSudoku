@@ -14,30 +14,38 @@ enum class ErrorReason {
 /**
  * 9x9 Sudoku puzzle where 0 means empty.
  */
-data class SudokuPuzzle(
-    val cells: Array<SudokuCell>,
+class SudokuPuzzle private constructor(
+    private val values: IntArray,
+    private val states: ByteArray,
 ) {
 
+    constructor(cells: Array<SudokuCell>) : this(
+        values = IntArray(cells.size) { index -> cells[index].value },
+        states = ByteArray(cells.size) { index -> stateToCode(cells[index].state) },
+    )
+
     init {
-        require(cells.size == 81) { "cells must have 81 values" }
+        // note: apart from the array sizes, those are guarantied by the public constructor
+        // and internal call to private constructor. We keep them for safe guard only
+        require(values.size == 81) { "values must have 81 entries" }
+        require(states.size == 81) { "states must have 81 entries" }
+        require(values.all { it in 0..9 }) { "values must be between 0 and 9" }
+        require(states.all { code -> codeToState(code) != null }) { "states contain invalid values" }
     }
 
-    fun cellAt(index: CellIndex): SudokuCell = cells[index.value]
+    fun cellAt(index: CellIndex): SudokuCell = SudokuCell(
+        value = values[index.value],
+        state = checkNotNull(codeToState(states[index.value])),
+    )
 
-    fun switchCandidate(index: CellIndex, value: Int): SudokuPuzzle {
-        require(value in 1..9) { "value must be between 1 and 9" }
-
-        val currentCell = cellAt(index)
-        if (currentCell.state.isFixed()) {
-            return this
+    fun <T> mapCells(transform: (index: CellIndex, cell: SudokuCell) -> T): List<T> =
+        (0 until 81).map { idx ->
+            val index = CellIndex(idx)
+            transform(index, cellAt(index))
         }
 
-        val updatedCandidateValues = currentCell.candidateValues.copyOf()
-        updatedCandidateValues[value - 1] = !updatedCandidateValues[value - 1]
-
-        val updatedCells = cells.copyOf()
-        updatedCells[index.value] = currentCell.copy(candidateValues = updatedCandidateValues)
-        return copy(cells = updatedCells)
+    fun isSolved(): Boolean = states.all { code ->
+        checkNotNull(codeToState(code)).isFixed()
     }
 
     fun setValue(index: CellIndex, value: Int): SetCellValueResult {
@@ -45,17 +53,17 @@ data class SudokuPuzzle(
             return SetCellValueResult.Error(ErrorReason.OUT_OF_RANGE)
         }
 
-        val currentCell = cellAt(index)
-        if (currentCell.state.isFixed()) {
+        val state = checkNotNull(codeToState(states[index.value]))
+        if (state.isFixed()) {
             return SetCellValueResult.CellAlreadyFixed
         }
-        if (value != currentCell.value) {
+        if (value != values[index.value]) {
             return SetCellValueResult.Error(ErrorReason.WRONG_VALUE)
         }
 
-        val updatedCells = cells.copyOf()
-        updatedCells[index.value] = currentCell.copy(state = CellState.FOUND)
-        return SetCellValueResult.Success(copy(cells = updatedCells))
+        val updatedStates = states.copyOf()
+        updatedStates[index.value] = stateToCode(CellState.FOUND)
+        return SetCellValueResult.Success(SudokuPuzzle(values, updatedStates))
     }
 
     fun asPrettyString(): String = buildString {
@@ -67,7 +75,7 @@ data class SudokuPuzzle(
                 if (col != 0 && col % 3 == 0) {
                     append("| ")
                 }
-                val value = cellAt(CellIndex(row, col)).value
+                val value = values[CellIndex(row, col).value]
                 append(if (value == 0) ". " else "$value ")
             }
             appendLine()
@@ -80,11 +88,31 @@ data class SudokuPuzzle(
 
         other as SudokuPuzzle
 
-        if (!cells.contentEquals(other.cells)) return false
+        if (!values.contentEquals(other.values)) return false
+        if (!states.contentEquals(other.states)) return false
 
         return true
     }
 
-    override fun hashCode(): Int = cells.contentHashCode()
+    override fun hashCode(): Int {
+        var result = values.contentHashCode()
+        result = 31 * result + states.contentHashCode()
+        return result
+    }
+
+    companion object {
+        private fun stateToCode(state: CellState): Byte = when (state) {
+            CellState.GIVEN -> 0
+            CellState.NOT_FOUND -> 1
+            CellState.FOUND -> 2
+        }
+
+        private fun codeToState(code: Byte): CellState? = when (code.toInt()) {
+            0 -> CellState.GIVEN
+            1 -> CellState.NOT_FOUND
+            2 -> CellState.FOUND
+            else -> null // todo: don't like this null. how to avoid it?
+        }
+    }
 }
 

@@ -1,20 +1,21 @@
 package org.jjgame.sudokuapp
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import android.content.res.ColorStateList
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
+import androidx.core.graphics.toColorInt
 import androidx.lifecycle.ViewModelProvider
 import org.jjgame.sudoku.Difficulty
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var boardView: SudokuBoardView
-    private lateinit var editCandidatesToggle: AppCompatImageButton
+    private lateinit var findCandidates: Button
+    private lateinit var editCandidates: AppCompatImageButton
     private lateinit var statusText: TextView
     private lateinit var gameViewModel: SudokuGameViewModel
 
@@ -23,16 +24,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         boardView  = findViewById(R.id.boardView)
-        editCandidatesToggle = findViewById(R.id.btnToggleEditCandidates)
+        findCandidates = findViewById(R.id.btnFindCandidates)
+        editCandidates = findViewById(R.id.btnToggleEditCandidates)
         statusText = findViewById(R.id.statusText)
         gameViewModel = ViewModelProvider(this)[SudokuGameViewModel::class.java]
 
         init()
 
-        editCandidatesToggle.setOnClickListener {
-            editCandidatesToggle.isSelected = !editCandidatesToggle.isSelected
+        findCandidates.setOnClickListener {
+            gameViewModel.gameSession.fastFillCandidate()
+            gameViewModel.persistGameSession()
+            updateCandidatesUi()
+            boardView.invalidate()
+        }
+
+        editCandidates.setOnClickListener {
+            editCandidates.isSelected = !editCandidates.isSelected
             updateEditCandidateToggleUi()
-            boardView.setEditCandidateMode(editCandidatesToggle.isSelected)
+            boardView.setEditCandidateMode(editCandidates.isSelected)
         }
 
         // Digit buttons 1–9 + clear
@@ -68,18 +77,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        boardView.init(gameViewModel.gameSession, { gameViewModel.persistGameSession() })
-        boardView.setEditCandidateMode(editCandidatesToggle.isSelected)
+        boardView.init(gameViewModel.gameSession) { gameViewModel.persistGameSession() }
+        boardView.setEditCandidateMode(editCandidates.isSelected)
+        updateCandidatesUi()
         updateEditCandidateToggleUi()
         statusText.text = gameViewModel.currentDifficulty.name.lowercase().replaceFirstChar { it.uppercase() }
     }
 
+    private fun updateCandidatesUi() {
+        editCandidates.isEnabled = true
+        boardView.setEditCandidateMode(editCandidates.isSelected)
+    }
+
     private fun updateEditCandidateToggleUi() {
-        val active = editCandidatesToggle.isSelected
-        editCandidatesToggle.imageTintList = ColorStateList.valueOf(
-            if (active) Color.parseColor("#FB8C00") else Color.parseColor("#555555"),
+        val active = editCandidates.isSelected
+        editCandidates.imageTintList = ColorStateList.valueOf(
+            if (active) "#FB8C00".toColorInt() else "#555555".toColorInt(),
         )
-        editCandidatesToggle.alpha = if (active) 1f else 0.7f
+        editCandidates.alpha = if (active) 1f else 0.7f
     }
 
     private fun checkWin() {

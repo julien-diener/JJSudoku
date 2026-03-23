@@ -12,12 +12,14 @@ data class CellError(
 data class RenderCell(
     val index: CellIndex,
     val cell: SudokuCell,
+    val candidateValues: BooleanArray? = null,
     val selected: Boolean,
     val errorValue: Int? = null,
 )
 
 class SudokuGameSession(
     var puzzle: SudokuPuzzle,
+    var candidates: SudokuCandidate = SudokuCandidate(),
 ) {
     val numberSelection: List<SudokuCell> = (1..9).map { value ->
         SudokuCell(value = value, state = CellState.GIVEN)
@@ -42,7 +44,7 @@ class SudokuGameSession(
         val currentSelectedNumber = selectedNumber ?: return
 
         if (editCandidate) {
-            puzzle = puzzle.switchCandidate(index, currentSelectedNumber)
+            candidates = candidates.switchCandidate(index, currentSelectedNumber)
             cellError = null
             return
         }
@@ -50,6 +52,7 @@ class SudokuGameSession(
         when (val setValueResult = puzzle.setValue(index, currentSelectedNumber)) {
             is SetCellValueResult.Success -> {
                 puzzle = setValueResult.puzzle
+                candidates = candidates.removeCandidateFrom(index, currentSelectedNumber)
                 cellError = null
             }
             // CellAlreadyFixed is unreachable here: fixed cells are handled by the early return above
@@ -71,17 +74,36 @@ class SudokuGameSession(
     fun parseGridCells(): List<RenderCell> = (0 until 81).map { idx ->
         val index = CellIndex(idx)
         val cell = puzzle.cellAt(index)
+        val candidateValues = if (cell.state == CellState.NOT_FOUND) {
+            candidates.valuesAt(index)
+        } else {
+            null
+        }
         val error = cellError
         val errorValue = if (error?.index == index) error.value else null
         val selected = cell.state.isFixed() && cell.value == selectedNumber
-        RenderCell(index = index, cell = cell, selected, errorValue = errorValue)
+        RenderCell(
+            index = index,
+            cell = cell,
+            candidateValues = candidateValues,
+            selected = selected,
+            errorValue = errorValue,
+        )
     }
 
     fun parseNumberSelectionCell(value: Int): RenderCell {
         require(value in 1..9) { "value must be between 1 and 9" }
         val cell = numberSelection[value - 1]
         val index = CellIndex(value)
-        return RenderCell(index = index, cell = cell, false, errorValue = null)
+        return RenderCell(index = index, cell = cell, candidateValues = null, selected = false, errorValue = null)
+    }
+
+    fun fastFillCandidate() {
+        candidates = puzzle
+            .mapCells { index, cell -> index to cell }
+            .fold(SudokuCandidate.allEnabled()) { acc, (index, cell) ->
+                if (cell.state.isFixed()) acc.removeCandidateFrom(index, cell.value) else acc
+            }
     }
 }
 

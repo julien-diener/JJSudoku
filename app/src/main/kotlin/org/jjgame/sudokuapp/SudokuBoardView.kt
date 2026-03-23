@@ -108,13 +108,14 @@ class SudokuBoardView @JvmOverloads constructor(
                 renderState.errorValue != null -> {
                     drawBigDigit(canvas, rect, renderState.errorValue!!, paintErrorDigit)
                 }
-                renderState.cell.state == CellState.NOT_FOUND -> {
-                    drawCandidateValues(
-                        canvas = canvas,
-                        rect = rect,
-                        candidateValues = renderState.cell.candidateValues,
-                        selectedValue = session.selectedNumber,
-                    )
+                renderState.cell.state == CellState.NOT_FOUND ->
+                    renderState.candidateValues?.let { candidateValues ->
+                        drawCandidateValues(
+                            canvas = canvas,
+                            rect = rect,
+                            candidateValues = candidateValues,
+                            selectedValue = session.selectedNumber,
+                        )
                 }
                 else -> {
                     val textPaint = if (renderState.cell.state == CellState.GIVEN) paintGivenDigit
@@ -171,7 +172,7 @@ class SudokuBoardView @JvmOverloads constructor(
 
     fun isSolved(): Boolean {
         val s = gameSession ?: return false
-        return s.cellError == null && s.puzzle.cells.all { it.state.isFixed() }
+        return s.cellError == null && s.puzzle.isSolved()
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

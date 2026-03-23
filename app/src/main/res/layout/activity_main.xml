@@ -40,8 +40,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="end|center_vertical"
+        android:gravity="center_vertical"
         android:paddingTop="6dp">
+
+        <Button
+                android:id="@+id/btnFindCandidates"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Find candidates"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btnToggleEditCandidates"

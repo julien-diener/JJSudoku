@@ -42,10 +42,20 @@ class GameSessionStorage(context: Context) {
         const val GRID_SIZE = 81
 
         internal fun encode(difficulty: Difficulty, session: SudokuGameSession): String {
+            val cellsJson = JSONArray().also { array ->
+                session.puzzle
+                    .mapCells { _, cell ->
+                        JSONObject()
+                            .put(KEY_VALUE, cell.value)
+                            .put(KEY_STATE, cell.state.name)
+                    }
+                    .forEach(array::put)
+            }
+
             val root = JSONObject()
                 .put(KEY_VERSION, SCHEMA_VERSION)
                 .put(KEY_DIFFICULTY, difficulty.name)
-                .put(KEY_CELLS, session.puzzle.cells.toJson())
+                .put(KEY_CELLS, cellsJson)
             return root.toString()
         }
 
@@ -70,15 +80,6 @@ class GameSessionStorage(context: Context) {
             )
         }.getOrNull()
 
-        private fun Array<SudokuCell>.toJson(): JSONArray = JSONArray().also { array ->
-            forEach { cell ->
-                array.put(
-                    JSONObject()
-                        .put(KEY_VALUE, cell.value)
-                        .put(KEY_STATE, cell.state.name),
-                )
-            }
-        }
     }
 }
 

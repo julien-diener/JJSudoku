@@ -1,6 +1,7 @@
 package org.jjgame.sudokuapp
 
 import org.jjgame.sudoku.CellState
+import org.jjgame.sudoku.CellIndex
 import org.jjgame.sudoku.Difficulty
 import org.jjgame.sudoku.SudokuCell
 import org.jjgame.sudoku.SudokuGameSession
@@ -8,7 +9,6 @@ import org.jjgame.sudoku.SudokuPuzzle
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class GameSessionStorageTest {
@@ -18,15 +18,16 @@ class GameSessionStorageTest {
 
         assertNotNull(restored)
         assertEquals(Difficulty.MEDIUM, restored?.difficulty)
-        assertEquals(81, restored?.session?.puzzle?.cells?.size)
+        val cellCount = restored!!.session.puzzle.mapCells { _, _ -> Unit }.size
+        assertEquals(81, cellCount)
 
-        val puzzle = restored!!.session.puzzle
-        assertEquals(CellState.FOUND, puzzle.cells[0].state)
-        assertEquals(1, puzzle.cells[0].value)
-        assertEquals(CellState.NOT_FOUND, puzzle.cells[1].state)
-        assertEquals(2, puzzle.cells[1].value)
-        assertEquals(CellState.GIVEN, puzzle.cells[80].state)
-        assertEquals(9, puzzle.cells[80].value)
+        val puzzle = restored.session.puzzle
+        assertEquals(CellState.FOUND, puzzle.cellAt(CellIndex(0)).state)
+        assertEquals(1, puzzle.cellAt(CellIndex(0)).value)
+        assertEquals(CellState.NOT_FOUND, puzzle.cellAt(CellIndex(1)).state)
+        assertEquals(2, puzzle.cellAt(CellIndex(1)).value)
+        assertEquals(CellState.GIVEN, puzzle.cellAt(CellIndex(80)).state)
+        assertEquals(9, puzzle.cellAt(CellIndex(80)).value)
     }
 
     @Test
@@ -56,7 +57,7 @@ class GameSessionStorageTest {
 
         assertNotNull(restored)
         assertEquals(Difficulty.HARD, restored?.difficulty)
-        assertTrue(session.puzzle.cells.contentEquals(restored?.session?.puzzle?.cells))
+        assertEquals(session.puzzle, restored?.session?.puzzle)
     }
 
     private fun readFixture(name: String): String {
