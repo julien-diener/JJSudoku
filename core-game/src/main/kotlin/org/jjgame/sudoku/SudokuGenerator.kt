@@ -10,22 +10,36 @@ enum class Difficulty(val emptyCells: Int) {
 
 object SudokuGenerator {
     fun generate(difficulty: Difficulty = Difficulty.EASY, random: Random = Random.Default): SudokuPuzzle {
-        val solved = shuffledSolvedBoard(random)
-        val puzzle = solved.copyOf()
-        val given = BooleanArray(81) { true }
+        val targetEmptyCells = difficulty.emptyCells
+        repeat(MAX_GENERATION_ATTEMPTS) {
+            val solved = shuffledSolvedBoard(random)
+            val clues = solved.copyOf()
+            var removed = 0
 
-        val positions = (0 until 81).shuffled(random)
-        repeat(difficulty.emptyCells) { index ->
-            val pos = positions[index]
-            given[pos] = false
+            for (pos in (0 until 81).shuffled(random)) {
+                if (removed == targetEmptyCells) break
+
+                val previous = clues[pos]
+                clues[pos] = 0
+
+                if (SudokuSolutionCounter.countSolutions(clues, limit = 2) == 1) {
+                    removed++
+                } else {
+                    clues[pos] = previous
+                }
+            }
+
+            if (removed == targetEmptyCells) {
+                return SudokuPuzzle(Array(81) { index ->
+                    SudokuCell(
+                        value = solved[index],
+                        state = if (clues[index] == 0) CellState.NOT_FOUND else CellState.GIVEN,
+                    )
+                })
+            }
         }
 
-        return SudokuPuzzle(Array(81) { index ->
-            SudokuCell(
-                value = puzzle[index],
-                state = if (given[index]) CellState.GIVEN else CellState.NOT_FOUND,
-            )
-        })
+        error("Could not generate a unique puzzle for $difficulty after $MAX_GENERATION_ATTEMPTS attempts")
     }
 
     private fun shuffledSolvedBoard(random: Random): IntArray {
@@ -48,5 +62,7 @@ object SudokuGenerator {
 
         return board
     }
+
+    private const val MAX_GENERATION_ATTEMPTS = 40
 }
 

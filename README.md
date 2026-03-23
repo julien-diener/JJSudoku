@@ -89,7 +89,7 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
 
 ## TODO
 
- - hide cells only if puzzle has still exactly one solution
+ x hide cells only if puzzle has still exactly one solution
  - improve selection buttons 
    - hide number selection button once all numbers are placed
    - display how many are left on selection number buttons
@@ -104,3 +104,6 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
    - add a timer and best time tracking
    - count errors and display them
    - be able to replay it step by step
+ - add about page with features, how to play, maybe todo, license, author, etc.
+ - work on difficulty, with guaranteed unique solution, hard is too simple 
+   - maybe use some heuristics to make it more human-like
