@@ -48,6 +48,22 @@ class SudokuPuzzle private constructor(
         checkNotNull(codeToState(code)).isFixed()
     }
 
+    /**
+     * Returns remaining unresolved cells per digit.
+     * Index 0 is digit 1, index 8 is digit 9.
+     */
+    fun remainingCountsByValue(): IntArray {
+        val counts = IntArray(9)
+        for (idx in states.indices) {
+            if (checkNotNull(codeToState(states[idx])) != CellState.NOT_FOUND) continue
+            val value = values[idx]
+            if (value in 1..9) {
+                counts[value - 1] += 1
+            }
+        }
+        return counts
+    }
+
     fun setValue(index: CellIndex, value: Int): SetCellValueResult {
         if (value !in 1..9) {
             return SetCellValueResult.Error(ErrorReason.OUT_OF_RANGE)
@@ -115,4 +131,3 @@ class SudokuPuzzle private constructor(
         }
     }
 }
-

@@ -89,7 +89,7 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
 ## Roadmap
 
 - [x] hide cells only if puzzle has still exactly one solution
-- [ ] improve selection buttons 
+- [x] improve selection buttons 
   - hide number selection button once all numbers are placed
   - display how many are left on selection number buttons
   - automatically select next selection number when finishing placing last one of a selection
@@ -117,3 +117,5 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
   - [ ] add some animations when placing numbers, winning, etc.?
   - [ ] editable mode font color should be darker ("wood" brown) and font bold maybe
 - [ ] the clear button does nothing
+- [ ] when finished, home should not show continue game. Maybe clear storage?
+- [ ] plug in github automatic build, with test coverage etc... if possible (and free)
