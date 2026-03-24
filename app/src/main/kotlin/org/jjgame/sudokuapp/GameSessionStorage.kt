@@ -23,6 +23,10 @@ class GameSessionStorage(context: Context) {
         return decode(payload)
     }
 
+    fun clear() {
+        preferences.edit().remove(KEY_SAVED_GAME).apply()
+    }
+
     data class RestoredGameSession(
         val difficulty: Difficulty,
         val session: SudokuGameSession,

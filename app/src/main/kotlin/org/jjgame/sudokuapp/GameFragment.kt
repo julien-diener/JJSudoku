@@ -174,6 +174,7 @@ class GameFragment : Fragment() {
 
     private fun checkWin() {
         if (!boardView.isSolved()) return
+        gameViewModel.clearSavedGame()
         AlertDialog.Builder(requireContext())
             .setTitle("🎉 You Win!")
             .setMessage("Congratulations, you solved the puzzle!")
@@ -182,7 +183,6 @@ class GameFragment : Fragment() {
                 init()
             }
             .setNegativeButton("Home") { _, _ ->
-                gameViewModel.persistGameSession()
                 parentFragmentManager.popBackStack()
             }
             .setCancelable(false)

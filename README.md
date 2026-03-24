@@ -116,6 +116,7 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
   - [ ] have a brown theme for a more classic look
   - [ ] add some animations when placing numbers, winning, etc.?
   - [ ] editable mode font color should be darker ("wood" brown) and font bold maybe
-- [ ] the clear button does nothing
-- [ ] when finished, home should not show continue game. Maybe clear storage?
+- [ ] the clear button does nothing 
+  - or remove clear button
+- [x] when finished, home should not show continue game. Maybe clear storage?
 - [ ] plug in github automatic build, with test coverage etc... if possible (and free)

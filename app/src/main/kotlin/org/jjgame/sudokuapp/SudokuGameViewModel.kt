@@ -35,7 +35,12 @@ class SudokuGameViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun hasSavedGame(): Boolean {
-        return storage.load() != null
+        val restored = storage.load() ?: return false
+        return !restored.session.puzzle.isSolved()
+    }
+
+    fun clearSavedGame() {
+        storage.clear()
     }
 
     fun loadSavedGame() {
