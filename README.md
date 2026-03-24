@@ -93,25 +93,27 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
   - hide number selection button once all numbers are placed
   - display how many are left on selection number buttons
   - automatically select next selection number when finishing placing last one of a selection
-- [ ] display "You win!" message when all numbers are placed
-- [ ] create a start/home page
+- [x] display "You win!" message when all numbers are placed
+- [x] create a start/home page
   - create game here
   - offer to continue previous game if there is one in progress
 - [ ] add a hint button to show one of the remaining numbers 
   - and be able to show it step by step
+- [ ] add a timer, also keep in memory start and end time
+- [ ] count errors and display them
 - [ ] keep all puzzle history in memory
-  - add a timer and best time tracking
-  - count errors and display them
-  - be able to replay it step by step
+  - [ ] store time of start, end, time taken
+  - [ ] best time tracking
+  - [ ] be able to replay it step by step?
 - [ ] add about page with features, how to play, maybe todo, license, author, etc.
 - [ ] work on difficulty (with guaranteed unique solution, hard is too simple) 
   - maybe use some heuristics to make it more human-like
 - [ ] manage horizontal display
 - [ ] improve appearance
-  - maybe add theme system, such as dark mode
-  - background color
-  - button color
-  - have a brown theme for a more classic look
-  - add some animations when placing numbers, winning, etc.?
+  - [ ] maybe add theme system, such as dark mode
+  - [ ] background color
+  - [ ] button color
+  - [ ] have a brown theme for a more classic look
+  - [ ] add some animations when placing numbers, winning, etc.?
   - [ ] editable mode font color should be darker ("wood" brown) and font bold maybe
 - [ ] the clear button does nothing

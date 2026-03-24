@@ -7,11 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import org.jjgame.sudoku.Difficulty
 
 class GameFragment : Fragment() {
 
@@ -43,7 +44,6 @@ class GameFragment : Fragment() {
         init()
 
         btnHome.setOnClickListener {
-            // Save game before returning home
             gameViewModel.persistGameSession()
             parentFragmentManager.popBackStack()
         }
@@ -61,7 +61,7 @@ class GameFragment : Fragment() {
             boardView.setEditCandidateMode(editCandidates.isSelected)
         }
 
-        // Digit buttons 1–9 + clear
+        // Digit buttons 1–9
         val digitIds = listOf(
             R.id.btn1, R.id.btn2, R.id.btn3,
             R.id.btn4, R.id.btn5, R.id.btn6,
@@ -70,7 +70,6 @@ class GameFragment : Fragment() {
         digitIds.forEachIndexed { index, id ->
             view.findViewById<Button>(id).setOnClickListener {
                 boardView.selectNumber(index + 1)
-                checkWin()
             }
         }
         view.findViewById<Button>(R.id.btnClear).setOnClickListener {
@@ -79,7 +78,10 @@ class GameFragment : Fragment() {
     }
 
     private fun init() {
-        boardView.init(gameViewModel.gameSession) { gameViewModel.persistGameSession() }
+        boardView.init(gameViewModel.gameSession) {
+            gameViewModel.persistGameSession()
+            checkWin()
+        }
         boardView.setEditCandidateMode(editCandidates.isSelected)
         updateCandidatesUi()
         updateEditCandidateToggleUi()
@@ -101,9 +103,21 @@ class GameFragment : Fragment() {
     }
 
     private fun checkWin() {
-        if (boardView.isSolved()) {
-            Toast.makeText(requireContext(), "🎉 Solved!", Toast.LENGTH_LONG).show()
-        }
+        if (!boardView.isSolved()) return
+        AlertDialog.Builder(requireContext())
+            .setTitle("🎉 You Win!")
+            .setMessage("Congratulations, you solved the puzzle!")
+            .setPositiveButton("New Game") { _, _ ->
+                gameViewModel.startGame()
+                init()
+            }
+            .setNegativeButton("Home") { _, _ ->
+                gameViewModel.persistGameSession()
+                parentFragmentManager.popBackStack()
+            }
+            .setCancelable(false)
+            .show()
     }
 }
+
 
