@@ -55,5 +55,20 @@ class SudokuGameViewModel(application: Application) : AndroidViewModel(applicati
         // selectedNumber and cellError are transient UI state and intentionally not saved.
         storage.save(currentDifficulty, gameSession)
     }
+
+    /** Called every second while the game screen is in the foreground. */
+    fun tickElapsed() {
+        if (gameSession.finishedAt == null) {
+            gameSession.elapsedSeconds++
+        }
+    }
+
+    /** Records the finish time and persists. Call when the puzzle is solved. */
+    fun recordFinish() {
+        if (gameSession.finishedAt == null) {
+            gameSession.finishedAt = System.currentTimeMillis()
+            persistGameSession()
+        }
+    }
 }
 

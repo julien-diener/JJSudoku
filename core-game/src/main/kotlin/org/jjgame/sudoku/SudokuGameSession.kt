@@ -20,6 +20,12 @@ data class RenderCell(
 class SudokuGameSession(
     var puzzle: SudokuPuzzle,
     var candidates: SudokuCandidate = SudokuCandidate(),
+    /** Epoch milliseconds when the game was first started. */
+    val startedAt: Long = System.currentTimeMillis(),
+    /** Accumulated play time in seconds (paused when app is backgrounded). */
+    var elapsedSeconds: Long = 0L,
+    /** Epoch milliseconds when the puzzle was solved, or null if still in progress. */
+    var finishedAt: Long? = null,
 ) {
     val numberSelection: List<SudokuCell> = (1..9).map { value ->
         SudokuCell(value = value, state = CellState.GIVEN)

@@ -99,7 +99,7 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
   - offer to continue previous game if there is one in progress
 - [ ] add a hint button to show one of the remaining numbers 
   - and be able to show it step by step
-- [ ] add a timer, also keep in memory start and end time
+- [x] add a timer, also keep in memory start and end time
 - [ ] count errors and display them
 - [ ] keep all puzzle history in memory
   - [ ] store time of start, end, time taken

@@ -16,26 +16,37 @@
 
         <Button
             android:id="@+id/btnHome"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:contentDescription="Home"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:text="🏠"
             android:textSize="20sp"
-            android:background="?attr/selectableItemBackgroundBorderless" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="start|center_vertical" />
 
         <TextView
             android:id="@+id/statusText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
             android:textSize="16sp"
             android:textColor="#555555" />
+
+        <TextView
+            android:id="@+id/timerText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            android:paddingEnd="8dp"
+            android:textSize="16sp"
+            android:textColor="#555555"
+            android:fontFamily="monospace"
+            android:text="0:00" />
     </LinearLayout>
 
     <!-- Board (square, fills available width) -->

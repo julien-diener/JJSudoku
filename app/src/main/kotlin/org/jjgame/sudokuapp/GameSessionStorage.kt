@@ -41,8 +41,11 @@ class GameSessionStorage(context: Context) {
         const val KEY_CELLS = "cells"
         const val KEY_VALUE = "value"
         const val KEY_STATE = "state"
+        const val KEY_STARTED_AT = "startedAt"
+        const val KEY_ELAPSED_SECONDS = "elapsedSeconds"
+        const val KEY_FINISHED_AT = "finishedAt"
 
-        const val SCHEMA_VERSION = 1
+        const val SCHEMA_VERSION = 2
         const val GRID_SIZE = 81
 
         internal fun encode(difficulty: Difficulty, session: SudokuGameSession): String {
@@ -60,12 +63,16 @@ class GameSessionStorage(context: Context) {
                 .put(KEY_VERSION, SCHEMA_VERSION)
                 .put(KEY_DIFFICULTY, difficulty.name)
                 .put(KEY_CELLS, cellsJson)
+                .put(KEY_STARTED_AT, session.startedAt)
+                .put(KEY_ELAPSED_SECONDS, session.elapsedSeconds)
+            session.finishedAt?.let { root.put(KEY_FINISHED_AT, it) }
             return root.toString()
         }
 
         internal fun decode(payload: String): RestoredGameSession? = runCatching {
             val root = JSONObject(payload)
-            if (root.optInt(KEY_VERSION) != SCHEMA_VERSION) return null
+            val version = root.optInt(KEY_VERSION)
+            if (version != SCHEMA_VERSION && version != 1) return null
 
             val difficulty = Difficulty.valueOf(root.getString(KEY_DIFFICULTY))
             val cellsJson = root.getJSONArray(KEY_CELLS)
@@ -78,9 +85,19 @@ class GameSessionStorage(context: Context) {
                 SudokuCell(value = value, state = state)
             }
 
+            // Timing fields added in v2; v1 saves get safe defaults
+            val startedAt = root.optLong(KEY_STARTED_AT, System.currentTimeMillis())
+            val elapsedSeconds = root.optLong(KEY_ELAPSED_SECONDS, 0L)
+            val finishedAt = if (root.has(KEY_FINISHED_AT)) root.getLong(KEY_FINISHED_AT) else null
+
             RestoredGameSession(
                 difficulty = difficulty,
-                session = SudokuGameSession(SudokuPuzzle(cells)),
+                session = SudokuGameSession(
+                    puzzle = SudokuPuzzle(cells),
+                    startedAt = startedAt,
+                    elapsedSeconds = elapsedSeconds,
+                    finishedAt = finishedAt,
+                ),
             )
         }.getOrNull()
 

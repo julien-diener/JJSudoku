@@ -18,6 +18,13 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class GameFragment : Fragment() {
 
@@ -25,9 +32,12 @@ class GameFragment : Fragment() {
     private lateinit var findCandidates: Button
     private lateinit var editCandidates: AppCompatImageButton
     private lateinit var statusText: TextView
+    private lateinit var timerText: TextView
     private lateinit var btnHome: Button
     private lateinit var gameViewModel: SudokuGameViewModel
     private lateinit var digitButtons: List<Button>
+
+    private var timerJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +54,7 @@ class GameFragment : Fragment() {
         findCandidates = view.findViewById(R.id.btnFindCandidates)
         editCandidates = view.findViewById(R.id.btnToggleEditCandidates)
         statusText = view.findViewById(R.id.statusText)
+        timerText = view.findViewById(R.id.timerText)
         btnHome = view.findViewById(R.id.btnHome)
         gameViewModel = ViewModelProvider(requireActivity())[SudokuGameViewModel::class.java]
 
@@ -86,6 +97,40 @@ class GameFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        startTimer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopTimer()
+        gameViewModel.persistGameSession()
+    }
+
+    private fun startTimer() {
+        if (gameViewModel.gameSession.finishedAt != null) return  // game already finished
+        timerJob = viewLifecycleOwner.lifecycleScope.launch {
+            while (true) {
+                updateTimerUi()
+                delay(1_000)
+                gameViewModel.tickElapsed()
+            }
+        }
+    }
+
+    private fun stopTimer() {
+        timerJob?.cancel()
+        timerJob = null
+    }
+
+    private fun updateTimerUi() {
+        val totalSeconds = gameViewModel.gameSession.elapsedSeconds
+        val minutes = totalSeconds / 60
+        val seconds = totalSeconds % 60
+        timerText.text = "%d:%02d".format(minutes, seconds)
+    }
+
     private fun init() {
         boardView.init(gameViewModel.gameSession) {
             gameViewModel.persistGameSession()
@@ -96,6 +141,7 @@ class GameFragment : Fragment() {
         updateCandidatesUi()
         updateEditCandidateToggleUi()
         updateNumberButtonsUi()
+        updateTimerUi()
         statusText.text = gameViewModel.currentDifficulty.name.lowercase()
             .replaceFirstChar { it.uppercase() }
     }
@@ -174,13 +220,34 @@ class GameFragment : Fragment() {
 
     private fun checkWin() {
         if (!boardView.isSolved()) return
+
+        stopTimer()
+        gameViewModel.recordFinish()
         gameViewModel.clearSavedGame()
+
+        val session = gameViewModel.gameSession
+        val dtFormat = SimpleDateFormat("dd MMM yyyy  HH:mm", Locale.getDefault())
+        val startStr = dtFormat.format(Date(session.startedAt))
+        val endStr = dtFormat.format(Date(session.finishedAt ?: System.currentTimeMillis()))
+        val elapsed = session.elapsedSeconds
+        val timeStr = if (elapsed >= 3600) {
+            "%d:%02d:%02d".format(elapsed / 3600, (elapsed % 3600) / 60, elapsed % 60)
+        } else {
+            "%d:%02d".format(elapsed / 60, elapsed % 60)
+        }
+
         AlertDialog.Builder(requireContext())
             .setTitle("🎉 You Win!")
-            .setMessage("Congratulations, you solved the puzzle!")
+            .setMessage(
+                "Congratulations, you solved the puzzle!\n\n" +
+                        "⏱ Time taken:  $timeStr\n" +
+                        "🕐 Started:      $startStr\n" +
+                        "🏁 Finished:    $endStr",
+            )
             .setPositiveButton("New Game") { _, _ ->
                 gameViewModel.startGame()
                 init()
+                startTimer()
             }
             .setNegativeButton("Home") { _, _ ->
                 parentFragmentManager.popBackStack()
