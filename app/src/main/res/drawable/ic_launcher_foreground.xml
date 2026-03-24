@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Sudoku grid logo: 9x9 grid as 3x3 bold boxes on a dark background.
+  ViewportWidth/Height: 108x108.
+  Layout:
+    3 boxes per axis. Each box = 35 units (3 cells of 11 + 2 gaps of 1).
+    Box gap (thick border): 3 units.
+    Box origins: 0, 38, 76.
+    Cell origins within box (relative): 0, 12, 24.
+
+  Colors:
+    Box outlines + filled cells: #FB8C00 (orange)
+    Inner cell dividers: #C65A00 (dark orange)
+    Background (adaptive): provided by ic_launcher_background (#1E1E1E)
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- ── BOX OUTLINES (1-unit border around each 3×3 box) ─────────────── -->
+    <!-- Box (0,0) -->
+    <path android:fillColor="#FB8C00" android:pathData="
+        M1,1 h35 v1 h-35 z
+        M1,35 h35 v1 h-35 z
+        M1,1 v35 h1 v-35 z
+        M35,1 v35 h1 v-35 z"/>
+    <!-- Box (1,0) -->
+    <path android:fillColor="#FB8C00" android:pathData="
+        M39,1 h35 v1 h-35 z
+        M39,35 h35 v1 h-35 z
+        M39,1 v35 h1 v-35 z
+        M73,1 v35 h1 v-35 z"/>
+    <!-- Box (2,0) -->
+    <path android:fillColor="#FB8C00" android:pathData="
+        M77,1 h30 v1 h-30 z
+        M77,35 h30 v1 h-30 z
+        M77,1 v35 h1 v-35 z
+        M106,1 v35 h1 v-35 z"/>
+    <!-- Box (0,1) -->
+    <path android:fillColor="#FB8C00" android:pathData="
+        M1,39 h35 v1 h-35 z
+        M1,73 h35 v1 h-35 z
+        M1,39 v35 h1 v-35 z
+        M35,39 v35 h1 v-35 z"/>
+    <!-- Box (1,1) -->
+    <path android:fillColor="#FB8C00" android:pathData="
+        M39,39 h35 v1 h-35 z
+        M39,73 h35 v1 h-35 z
+        M39,39 v35 h1 v-35 z
+        M73,39 v35 h1 v-35 z"/>
+    <!-- Box (2,1) -->
+    <path android:fillColor="#FB8C00" android:pathData="
+        M77,39 h30 v1 h-30 z
+        M77,73 h30 v1 h-30 z
+        M77,39 v35 h1 v-35 z
+        M106,39 v35 h1 v-35 z"/>
+    <!-- Box (0,2) -->
+    <path android:fillColor="#FB8C00" android:pathData="
+        M1,77 h35 v1 h-35 z
+        M1,106 h35 v1 h-35 z
+        M1,77 v30 h1 v-30 z
+        M35,77 v30 h1 v-30 z"/>
+    <!-- Box (1,2) -->
+    <path android:fillColor="#FB8C00" android:pathData="
+        M39,77 h35 v1 h-35 z
+        M39,106 h35 v1 h-35 z
+        M39,77 v30 h1 v-30 z
+        M73,77 v30 h1 v-30 z"/>
+    <!-- Box (2,2) -->
+    <path android:fillColor="#FB8C00" android:pathData="
+        M77,77 h30 v1 h-30 z
+        M77,106 h30 v1 h-30 z
+        M77,77 v30 h1 v-30 z
+        M106,77 v30 h1 v-30 z"/>
+
+    <!-- ── INNER CELL DIVIDERS (horizontal) ─────────────────────────────── -->
+    <path android:fillColor="#C65A00" android:pathData="
+        M2,13 h33 v1 h-33 z   M2,25 h33 v1 h-33 z
+        M40,13 h33 v1 h-33 z  M40,25 h33 v1 h-33 z
+        M78,13 h28 v1 h-28 z  M78,25 h28 v1 h-28 z
+        M2,51 h33 v1 h-33 z   M2,63 h33 v1 h-33 z
+        M40,51 h33 v1 h-33 z  M40,63 h33 v1 h-33 z
+        M78,51 h28 v1 h-28 z  M78,63 h28 v1 h-28 z
+        M2,89 h33 v1 h-33 z   M2,101 h33 v1 h-33 z
+        M40,89 h33 v1 h-33 z  M40,101 h33 v1 h-33 z
+        M78,89 h28 v1 h-28 z  M78,101 h28 v1 h-28 z"/>
+
+    <!-- ── INNER CELL DIVIDERS (vertical) ───────────────────────────────── -->
+    <path android:fillColor="#C65A00" android:pathData="
+        M13,2 v33 h1 v-33 z   M25,2 v33 h1 v-33 z
+        M51,2 v33 h1 v-33 z   M63,2 v33 h1 v-33 z
+        M89,2 v33 h1 v-33 z   M101,2 v33 h1 v-33 z
+        M13,40 v33 h1 v-33 z  M25,40 v33 h1 v-33 z
+        M51,40 v33 h1 v-33 z  M63,40 v33 h1 v-33 z
+        M89,40 v33 h1 v-33 z  M101,40 v33 h1 v-33 z
+        M13,78 v28 h1 v-28 z  M25,78 v28 h1 v-28 z
+        M51,78 v28 h1 v-28 z  M63,78 v28 h1 v-28 z
+        M89,78 v28 h1 v-28 z  M101,78 v28 h1 v-28 z"/>
+
+    <!-- ── FILLED CELLS (orange solid, 11×11) ───────────────────────────── -->
+    <!-- One per box, spread to suggest a puzzle in progress -->
+    <!-- box(0,0) cell(0,0) -->
+    <path android:fillColor="#FB8C00" android:pathData="M2,2 h11 v11 h-11 z"/>
+    <!-- box(1,0) cell(1,1) -->
+    <path android:fillColor="#FB8C00" android:pathData="M51,14 h11 v11 h-11 z"/>
+    <!-- box(2,0) cell(2,2) -->
+    <path android:fillColor="#FB8C00" android:pathData="M89,26 h11 v11 h-11 z"/>
+    <!-- box(0,1) cell(2,0) -->
+    <path android:fillColor="#FB8C00" android:pathData="M2,64 h11 v11 h-11 z"/>
+    <!-- box(1,1) cell(0,2) -->
+    <path android:fillColor="#FB8C00" android:pathData="M63,40 h11 v11 h-11 z"/>
+    <!-- box(2,1) cell(1,0) -->
+    <path android:fillColor="#FB8C00" android:pathData="M78,52 h11 v11 h-11 z"/>
+    <!-- box(0,2) cell(1,2) -->
+    <path android:fillColor="#FB8C00" android:pathData="M25,90 h11 v11 h-11 z"/>
+    <!-- box(1,2) cell(0,0) -->
+    <path android:fillColor="#FB8C00" android:pathData="M40,78 h11 v11 h-11 z"/>
+    <!-- box(2,2) cell(2,1) -->
+    <path android:fillColor="#FB8C00" android:pathData="M89,101 h11 v11 h-11 z"/>
+
+</vector>
+

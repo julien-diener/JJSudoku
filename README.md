@@ -120,3 +120,82 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
   - or remove clear button
 - [x] when finished, home should not show continue game. Maybe clear storage?
 - [ ] plug in github automatic build, with test coverage etc... if possible (and free)
+- [ ] add to google play store
+
+
+## Publishing to Google Play Store
+
+### 1. Create a Developer Account
+- Go to https://play.google.com/console and sign in with your Google account
+- Pay the one-time **$25 registration fee**
+
+### 2. Create a Signing Keystore (once — keep it safe forever, do NOT commit it)
+
+```bash
+keytool -genkey -v -keystore jjsudoku.jks -keyalg RSA -keysize 2048 -validity 10000 -alias jjsudoku
+```
+
+Add `jjsudoku.jks` to `.gitignore` immediately.
+
+### 3. Configure Release Signing in `app/build.gradle.kts`
+
+```kotlin
+android {
+    signingConfigs {
+        create("release") {
+            storeFile = file("../jjsudoku.jks")   // path relative to app/
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
+            keyAlias = "jjsudoku"
+            keyPassword = System.getenv("KEY_PASSWORD")
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+        }
+    }
+}
+```
+
+Using environment variables avoids storing passwords in source control.
+
+### 4. Build the Release AAB
+
+```bash
+KEYSTORE_PASSWORD=yourpassword KEY_PASSWORD=yourpassword \
+  ./gradlew :app:bundleRelease
+```
+
+Output: `app/build/outputs/bundle/release/app-release.aab`
+
+### 5. Prepare Store Assets (required)
+- **App icon**: 512×512 PNG
+- **Screenshots**: at least 2 phone screenshots
+- **Short description**: max 80 characters
+- **Full description**
+- **Feature graphic**: 1024×500 PNG (recommended)
+
+### 6. Create & Submit the App in Play Console
+1. **Create app** → set title, language, free, game type
+2. **Content rating** questionnaire → will be rated *Everyone*
+3. **Data safety** form → no data collected, no network (straightforward for this app)
+4. Go to **Production** (or **Internal Testing** first, recommended)
+5. Upload the `.aab`, fill release notes, and **Submit for review**
+
+> First review typically takes **a few days**.
+
+### Release Checklist
+- [ ] Keystore created and backed up securely
+- [ ] `jjsudoku.jks` added to `.gitignore`
+- [ ] `versionCode` incremented in `app/build.gradle.kts` for each new release
+- [ ] `versionName` updated (currently `0.1.0`)
+- [ ] App icon designed (currently uses default Android icon)
+- [ ] Screenshots taken
+- [ ] Store listing text written
+- [ ] Data safety form completed
+

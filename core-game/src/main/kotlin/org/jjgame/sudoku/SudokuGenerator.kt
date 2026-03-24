@@ -4,8 +4,8 @@ import kotlin.random.Random
 
 enum class Difficulty(val emptyCells: Int) {
     EASY(36),
-    MEDIUM(46),
-    HARD(54),
+    MEDIUM(50),
+    HARD(60),
 }
 
 object SudokuGenerator {
