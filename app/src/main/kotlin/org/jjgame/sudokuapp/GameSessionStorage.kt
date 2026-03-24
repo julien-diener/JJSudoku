@@ -44,6 +44,7 @@ class GameSessionStorage(context: Context) {
         const val KEY_STARTED_AT = "startedAt"
         const val KEY_ELAPSED_SECONDS = "elapsedSeconds"
         const val KEY_FINISHED_AT = "finishedAt"
+        const val KEY_ERROR_COUNT = "errorCount"
 
         const val SCHEMA_VERSION = 2
         const val GRID_SIZE = 81
@@ -65,6 +66,7 @@ class GameSessionStorage(context: Context) {
                 .put(KEY_CELLS, cellsJson)
                 .put(KEY_STARTED_AT, session.startedAt)
                 .put(KEY_ELAPSED_SECONDS, session.elapsedSeconds)
+                .put(KEY_ERROR_COUNT, session.errorCount)
             session.finishedAt?.let { root.put(KEY_FINISHED_AT, it) }
             return root.toString()
         }
@@ -89,6 +91,7 @@ class GameSessionStorage(context: Context) {
             val startedAt = root.optLong(KEY_STARTED_AT, System.currentTimeMillis())
             val elapsedSeconds = root.optLong(KEY_ELAPSED_SECONDS, 0L)
             val finishedAt = if (root.has(KEY_FINISHED_AT)) root.getLong(KEY_FINISHED_AT) else null
+            val errorCount = root.optInt(KEY_ERROR_COUNT, 0)
 
             RestoredGameSession(
                 difficulty = difficulty,
@@ -97,6 +100,7 @@ class GameSessionStorage(context: Context) {
                     startedAt = startedAt,
                     elapsedSeconds = elapsedSeconds,
                     finishedAt = finishedAt,
+                    errorCount = errorCount,
                 ),
             )
         }.getOrNull()

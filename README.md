@@ -100,7 +100,7 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
 - [ ] add a hint button to show one of the remaining numbers 
   - and be able to show it step by step
 - [x] add a timer, also keep in memory start and end time
-- [ ] count errors and display them
+- [x] count errors and display them
 - [ ] keep all puzzle history in memory
   - [ ] store time of start, end, time taken
   - [ ] best time tracking

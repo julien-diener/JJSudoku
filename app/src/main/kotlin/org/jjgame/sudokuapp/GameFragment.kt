@@ -32,6 +32,7 @@ class GameFragment : Fragment() {
     private lateinit var findCandidates: Button
     private lateinit var editCandidates: AppCompatImageButton
     private lateinit var statusText: TextView
+    private lateinit var errorText: TextView
     private lateinit var timerText: TextView
     private lateinit var btnHome: Button
     private lateinit var gameViewModel: SudokuGameViewModel
@@ -54,6 +55,7 @@ class GameFragment : Fragment() {
         findCandidates = view.findViewById(R.id.btnFindCandidates)
         editCandidates = view.findViewById(R.id.btnToggleEditCandidates)
         statusText = view.findViewById(R.id.statusText)
+        errorText = view.findViewById(R.id.errorText)
         timerText = view.findViewById(R.id.timerText)
         btnHome = view.findViewById(R.id.btnHome)
         gameViewModel = ViewModelProvider(requireActivity())[SudokuGameViewModel::class.java]
@@ -135,6 +137,7 @@ class GameFragment : Fragment() {
         boardView.init(gameViewModel.gameSession) {
             gameViewModel.persistGameSession()
             updateNumberButtonsUi()
+            updateErrorUi()
             checkWin()
         }
         boardView.setEditCandidateMode(editCandidates.isSelected)
@@ -142,6 +145,7 @@ class GameFragment : Fragment() {
         updateEditCandidateToggleUi()
         updateNumberButtonsUi()
         updateTimerUi()
+        updateErrorUi()
         statusText.text = gameViewModel.currentDifficulty.name.lowercase()
             .replaceFirstChar { it.uppercase() }
     }
@@ -149,6 +153,19 @@ class GameFragment : Fragment() {
     private fun updateCandidatesUi() {
         editCandidates.isEnabled = true
         boardView.setEditCandidateMode(editCandidates.isSelected)
+    }
+
+    private fun updateErrorUi() {
+        val count = gameViewModel.gameSession.errorCount
+        errorText.text = "errors: $count"
+        errorText.setTextColor(
+            when {
+                count == 0 -> "#888888"
+                count == 1 -> "#F9A825"  // yellow
+                count == 2 -> "#EF6C00"  // orange
+                else       -> "#C62828"  // red
+            }.toColorInt()
+        )
     }
 
     private fun updateEditCandidateToggleUi() {
@@ -242,7 +259,8 @@ class GameFragment : Fragment() {
                 "Congratulations, you solved the puzzle!\n\n" +
                         "⏱ Time taken:  $timeStr\n" +
                         "🕐 Started:      $startStr\n" +
-                        "🏁 Finished:    $endStr",
+                        "🏁 Finished:    $endStr\n" +
+                        "❌ Errors:        ${session.errorCount}",
             )
             .setPositiveButton("New Game") { _, _ ->
                 gameViewModel.startGame()

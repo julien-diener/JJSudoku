@@ -329,5 +329,6 @@
   ],
   "startedAt": 1742812800000,
   "elapsedSeconds": 742,
-  "finishedAt": 1742813542000
+  "finishedAt": 1742813542000,
+  "errorCount": 3
 }

@@ -43,6 +43,7 @@ class GameSessionStorageTest {
         assertEquals(1742812800000L, restored!!.session.startedAt)
         assertEquals(742L, restored.session.elapsedSeconds)
         assertEquals(1742813542000L, restored.session.finishedAt)
+        assertEquals(3, restored.session.errorCount)
     }
 
     @Test
@@ -70,6 +71,7 @@ class GameSessionStorageTest {
             startedAt = 1742812800000L,
             elapsedSeconds = 300L,
             finishedAt = 1742813100000L,
+            errorCount = 5,
         )
 
         val encoded = GameSessionStorage.encode(Difficulty.HARD, session)
@@ -81,6 +83,7 @@ class GameSessionStorageTest {
         assertEquals(1742812800000L, restored?.session?.startedAt)
         assertEquals(300L, restored?.session?.elapsedSeconds)
         assertEquals(1742813100000L, restored?.session?.finishedAt)
+        assertEquals(5, restored?.session?.errorCount)
     }
 
     private fun readFixture(name: String): String {

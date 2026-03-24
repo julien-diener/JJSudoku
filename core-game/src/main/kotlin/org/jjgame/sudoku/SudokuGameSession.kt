@@ -26,6 +26,8 @@ class SudokuGameSession(
     var elapsedSeconds: Long = 0L,
     /** Epoch milliseconds when the puzzle was solved, or null if still in progress. */
     var finishedAt: Long? = null,
+    /** Total number of wrong value attempts made during the game. */
+    var errorCount: Int = 0,
 ) {
     val numberSelection: List<SudokuCell> = (1..9).map { value ->
         SudokuCell(value = value, state = CellState.GIVEN)
@@ -67,6 +69,7 @@ class SudokuGameSession(
             -> {
                 cellError = CellError(index = index, value = currentSelectedNumber)
                 selectedNumber = null
+                errorCount++
             }
         }
     }
