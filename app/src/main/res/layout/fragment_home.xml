@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="24dp"
+    android:background="#FAFAFA">
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="JJSudoku"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:textColor="#333333"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="48dp" />
+
+    <!-- Continue Game Button (conditionally shown) -->
+    <Button
+        android:id="@+id/btnContinueGame"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="Continue Game"
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:layout_marginBottom="32dp" />
+
+    <!-- New Game Section -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Game"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#333333"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Difficulty Buttons -->
+    <Button
+        android:id="@+id/btnEasy"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="Easy"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnMedium"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="Medium"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnHard"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="Hard"
+        android:textSize="16sp"
+        android:layout_marginBottom="32dp" />
+
+</LinearLayout>
+

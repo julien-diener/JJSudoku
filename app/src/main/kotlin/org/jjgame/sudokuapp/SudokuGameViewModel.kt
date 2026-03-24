@@ -34,6 +34,18 @@ class SudokuGameViewModel(application: Application) : AndroidViewModel(applicati
         persistGameSession()
     }
 
+    fun hasSavedGame(): Boolean {
+        return storage.load() != null
+    }
+
+    fun loadSavedGame() {
+        val restored = storage.load()
+        if (restored != null) {
+            currentDifficulty = restored.difficulty
+            gameSession = restored.session
+        }
+    }
+
     fun persistGameSession() {
         // selectedNumber and cellError are transient UI state and intentionally not saved.
         storage.save(currentDifficulty, gameSession)

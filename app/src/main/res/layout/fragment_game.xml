@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="#FAFAFA">
+
+    <!-- Title + status row with home button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingBottom="4dp">
+
+        <Button
+            android:id="@+id/btnHome"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:contentDescription="Home"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="🏠"
+            android:textSize="20sp"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#555555" />
+    </LinearLayout>
+
+    <!-- Board (square, fills available width) -->
+    <org.jjgame.sudokuapp.SudokuBoardView
+        android:id="@+id/boardView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingTop="6dp">
+
+        <Button
+            android:id="@+id/btnFindCandidates"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Find candidates" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btnToggleEditCandidates"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="Toggle candidate editing"
+            android:padding="8dp"
+            android:src="@android:drawable/ic_menu_edit"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+    </LinearLayout>
+
+    <!-- Digit pad: 1–9 -->
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="9"
+        android:paddingTop="6dp">
+
+        <Button android:id="@+id/btn1"
+            android:layout_columnWeight="1" android:layout_width="0dp"
+            android:text="1" android:textSize="18sp" android:padding="4dp"
+            android:textColor="#000000" android:background="#E0E0E0" />
+        <Button android:id="@+id/btn2"
+            android:layout_columnWeight="1" android:layout_width="0dp"
+            android:text="2" android:textSize="18sp" android:padding="4dp"
+            android:textColor="#000000" android:background="#E0E0E0" />
+        <Button android:id="@+id/btn3"
+            android:layout_columnWeight="1" android:layout_width="0dp"
+            android:text="3" android:textSize="18sp" android:padding="4dp"
+            android:textColor="#000000" android:background="#E0E0E0" />
+        <Button android:id="@+id/btn4"
+            android:layout_columnWeight="1" android:layout_width="0dp"
+            android:text="4" android:textSize="18sp" android:padding="4dp"
+            android:textColor="#000000" android:background="#E0E0E0" />
+        <Button android:id="@+id/btn5"
+            android:layout_columnWeight="1" android:layout_width="0dp"
+            android:text="5" android:textSize="18sp" android:padding="4dp"
+            android:textColor="#000000" android:background="#E0E0E0" />
+        <Button android:id="@+id/btn6"
+            android:layout_columnWeight="1" android:layout_width="0dp"
+            android:text="6" android:textSize="18sp" android:padding="4dp"
+            android:textColor="#000000" android:background="#E0E0E0" />
+        <Button android:id="@+id/btn7"
+            android:layout_columnWeight="1" android:layout_width="0dp"
+            android:text="7" android:textSize="18sp" android:padding="4dp"
+            android:textColor="#000000" android:background="#E0E0E0" />
+        <Button android:id="@+id/btn8"
+            android:layout_columnWeight="1" android:layout_width="0dp"
+            android:text="8" android:textSize="18sp" android:padding="4dp"
+            android:textColor="#000000" android:background="#E0E0E0" />
+        <Button android:id="@+id/btn9"
+            android:layout_columnWeight="1" android:layout_width="0dp"
+            android:text="9" android:textSize="18sp" android:padding="4dp"
+            android:textColor="#000000" android:background="#E0E0E0" />
+    </GridLayout>
+
+    <!-- Clear row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="4dp">
+
+        <Button
+            android:id="@+id/btnClear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="✕ Clear" />
+    </LinearLayout>
+
+</LinearLayout>
+
