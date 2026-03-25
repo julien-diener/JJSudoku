@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 rootProject.name = "JJSudoku"
 include(":core-game")
 include(":app")
+include(":hodoku-core")
