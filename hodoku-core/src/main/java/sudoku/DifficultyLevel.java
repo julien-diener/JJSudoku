@@ -19,7 +19,6 @@
 
 package sudoku;
 
-import java.awt.Color;
 
 /**
  *
@@ -30,20 +29,15 @@ public final class DifficultyLevel {
 	private int ordinal;
 	private int maxScore;
 	private String name;
-	private Color backgroundColor;
-	private Color foregroundColor;
 
 	public DifficultyLevel() {
-		// für XMLEncoder
+		// default constructor
 	}
 
-	public DifficultyLevel(DifficultyType type, int maxScore, String name, Color backgroundColor,
-			Color foregroundColor) {
+	public DifficultyLevel(DifficultyType type, int maxScore, String name) {
 		setType(type);
 		setMaxScore(maxScore);
 		setName(name);
-		setBackgroundColor(backgroundColor);
-		setForegroundColor(foregroundColor);
 	}
 
 	public int getMaxScore() {
@@ -54,14 +48,6 @@ public final class DifficultyLevel {
 		return name;
 	}
 
-	public Color getBackgroundColor() {
-		return backgroundColor;
-	}
-
-	public Color getForegroundColor() {
-		return foregroundColor;
-	}
-
 	public void setMaxScore(int maxScore) {
 		this.maxScore = maxScore;
 	}
@@ -70,13 +56,6 @@ public final class DifficultyLevel {
 		this.name = name;
 	}
 
-	public void setBackgroundColor(Color backgroundColor) {
-		this.backgroundColor = backgroundColor;
-	}
-
-	public void setForegroundColor(Color foregroundColor) {
-		this.foregroundColor = foregroundColor;
-	}
 
 	public DifficultyType getType() {
 		return type;

@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2019-20  PseudoFish
  * Copyright (C) 2008-12  Bernhard Hobiger
@@ -21,17 +22,6 @@ package sudoku;
 
 import generator.BackgroundGeneratorThread;
 import generator.GeneratorPattern;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -59,24 +49,12 @@ public final class Options {
 	
 	// Schwierigkeitsstufen
 	public static final DifficultyLevel[] DEFAULT_DIFFICULTY_LEVELS = {
-			new DifficultyLevel(DifficultyType.INCOMPLETE, 0,
-					java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.incomplete"), Color.BLACK,
-					Color.WHITE),
-			new DifficultyLevel(DifficultyType.EASY, 800,
-					java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.easy"), Color.WHITE,
-					Color.BLACK),
-			new DifficultyLevel(DifficultyType.MEDIUM, 1000,
-					java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.medium"),
-					new Color(100, 255, 100), Color.BLACK),
-			new DifficultyLevel(DifficultyType.HARD, 1600,
-					java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.hard"),
-					new Color(255, 255, 100), Color.BLACK),
-			new DifficultyLevel(DifficultyType.UNFAIR, 1800,
-					java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.unfair"),
-					new Color(255, 150, 80), Color.BLACK),
-			new DifficultyLevel(DifficultyType.EXTREME, Integer.MAX_VALUE,
-					java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.extreme"),
-					new Color(255, 100, 100), Color.BLACK) };
+			new DifficultyLevel(DifficultyType.INCOMPLETE, 0, "Incomplete"),
+			new DifficultyLevel(DifficultyType.EASY, 800, "Easy"),
+			new DifficultyLevel(DifficultyType.MEDIUM, 1000, "Medium"),
+			new DifficultyLevel(DifficultyType.HARD, 1600, "Hard"),
+			new DifficultyLevel(DifficultyType.UNFAIR, 1800, "Unfair"),
+			new DifficultyLevel(DifficultyType.EXTREME, Integer.MAX_VALUE, "Extreme") };
 
 	private DifficultyLevel[] difficultyLevels = null;
 	// Reihenfolge und Konfiguration der SolutionSteps
@@ -373,26 +351,6 @@ public final class Options {
 	private boolean allStepsAlsChainForwardOnly = ALL_STEPS_ALS_CHAIN_FORWARD_ONLY;
 	// SudokuPanel
 	// Coloring Solver
-	public static final Color DEFAULT_PRIMARY_COLOR = new Color(134, 242, 128);
-	public static final Color DEFAULT_SECONDARY_COLOR = new Color(247, 165, 167);
-	public static final Color[] COLORING_COLORS = { 
-		new Color(255, 192, 89),  // 'a' - first color of first color pair
-		new Color(247, 222, 143), // 'A' - second color of first color pair
-		new Color(177, 165, 243), // 'b' - first color of second color pair
-		new Color(220, 212, 252), // 'B' - second color of second color pair
-		new Color(247, 165, 167), // 'c' - first color of third color pair
-		new Color(255, 210, 210), // 'C' - second color of third color pair
-		new Color(134, 232, 208), // 'd' - first color of fourth color pair
-		new Color(206, 251, 237), // 'D' - second color of fourth color pair
-		new Color(134, 242, 128), // 'e' - first color of fifth color pair
-		new Color(215, 255, 215), // 'E' - second color of fifth color pair
-		new Color(51, 204, 255),  // first color of sixth color pair
-		new Color(255, 255, 0)    // second color of sixth color pair
-	};
-	
-	public static final boolean COLOR_VALUES = true;
-	private Color[] coloringColors = null;
-	private boolean colorValues = COLOR_VALUES;
 	// Single Digit Pattern Solver
 	public static final boolean ALLOW_ERS_WITH_ONLY_TWO_CANDIDATES = false; // as it sais...
 	private boolean allowErsWithOnlyTwoCandidates = ALLOW_ERS_WITH_ONLY_TWO_CANDIDATES;
@@ -445,6 +403,12 @@ public final class Options {
 	public static final boolean AUTO_HIGHLIGHTING = false;
 	public static final boolean COLORS_VISIBLE = true;
 	public static final boolean HIGHLIGHT_GIVENS = false;
+	public static final int[] COLORING_COLORS = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	public static final boolean COLOR_VALUES = false;
+	public static final double VALUE_FONT_FACTOR = 1.0;
+	public static final double CANDIDATE_FONT_FACTOR = 1.0;
+	public static final double HINT_BACK_FACTOR = 1.0;
+	public static final double BOX_LINE_FACTOR = 1.0;
 	private boolean showCandidates = SHOW_CANDIDATES;
 	private boolean showCandidateHighlight = SHOW_CANDIDATE_HIGHLIGHT;
 	private boolean showWrongValues = SHOW_WRONG_VALUES;
@@ -479,111 +443,17 @@ public final class Options {
 	private boolean isAutoHighlighting = AUTO_HIGHLIGHTING;
 	private boolean isColoringVisible = COLORS_VISIBLE;
 	private boolean isHighlightingGivens = HIGHLIGHT_GIVENS;
+	private int[] coloringColors = Arrays.copyOf(COLORING_COLORS, COLORING_COLORS.length);
+	private boolean colorValues = COLOR_VALUES;
 	// Clipboard
 	public static final boolean USE_ZERO_INSTEAD_OF_DOT = false; // as the name says...
 	private boolean useZeroInsteadOfDot = USE_ZERO_INSTEAD_OF_DOT;
-	// Farben und Fonts
-	public static final Color GRID_COLOR = Color.BLACK; // Zeichenfarbe für den Rahmen
-	public static final Color INNER_GRID_COLOR = Color.LIGHT_GRAY; // Linien innerhalb des Rahmens
-	public static final Color WRONG_VALUE_COLOR = Color.RED; // Wert oder Kandidat an dieser Stelle nicht möglich
-	public static final Color DEVIATION_COLOR = new Color(255, 185, 185); // Wert oder Kandidat stimmt nicht mit Lösung
-																			// überein
-	public static final Color CELL_FIXED_VALUE_COLOR = Color.BLACK; // vorgegebene Werte
-	public static final Color CELL_VALUE_COLOR = Color.BLUE; // korrekte selbst eingegebene Zellenwerte
-	public static final Color CANDIDATE_COLOR = new Color(100, 100, 100); // korrekte Kandidaten
-	public static final Color DEFAULT_CELL_COLOR = Color.WHITE; // Hintergrund normale Zelle
-	public static final Color ALTERNATE_CELL_COLOR = Color.WHITE; // Hintergrund normale Zelle in jedem zweiten Block
-	public static final Color AKT_CELL_COLOR = new Color(255, 255, 150); // Hintergrund aktuell markierte Zelle
-	public static final Color INVERSE_FILTER_COLOR = new Color(255, 185, 185); // Hintergrund Zelle mit ungültigen Wert
-	public static final Color FILTER_COLOR = new Color(185, 255, 185); // Hintergrund Zelle mit möglichem Wert
-	public static final Color FILTER_GIVEN_CELL_COLOR = new Color(108, 216, 108);
-	public static final Color HINT_CANDIDATE_BACK_COLOR = new Color(63, 218, 101); // Hintergrund Kandidat in Hinweis
-	public static final Color HINT_CANDIDATE_DELETE_BACK_COLOR = new Color(255, 118, 132); // Hintergrund für zu
-																							// löschende Kandidaten
-	public static final Color HINT_CANDIDATE_CANNIBALISTIC_BACK_COLOR = new Color(235, 0, 0); // Hintergrund für zu
-																								// löschende Kandidaten
-	public static final Color HINT_CANDIDATE_FIN_BACK_COLOR = new Color(127, 187, 255); // Hintergrund für Fins
-	public static final Color HINT_CANDIDATE_ENDO_FIN_BACK_COLOR = new Color(216, 178, 255); // Hintergrund für
-																								// Endo-Fins
-	public static final Color HINT_CANDIDATE_COLOR = Color.BLACK; // Zeichenfarbe Kandidat in Hinweis
-	public static final Color HINT_CANDIDATE_DELETE_COLOR = Color.BLACK; // Zeichenfarbe für zu löschende Kandidaten
-	public static final Color HINT_CANDIDATE_CANNIBALISTIC_COLOR = Color.BLACK; // Zeichenfarbe für zu löschende
-																				// Kandidaten
-	public static final Color HINT_CANDIDATE_FIN_COLOR = Color.BLACK; // Zeichenfarbe für Fins
-	public static final Color HINT_CANDIDATE_ENDO_FIN_COLOR = Color.BLACK; // Zeichenfarbe für Endo-Fins
-	public static final Color[] HINT_CANDIDATE_ALS_BACK_COLORS = { // Hintergrund für ALS (verschieden wegen Chains und
-																	// Wings)
-			new Color(197, 232, 140), new Color(255, 203, 203), new Color(178, 223, 223), new Color(252, 220, 165)
-//        new Color(150, 150, 255),
-//        new Color(150, 255, 150),
-//        new Color(150, 100, 255),
-//        new Color(150, 255, 100)
-	};
-	public static final Color[] COLORKU_COLORS = { new Color(252, 20, 16), new Color(251, 153, 0), // a better orange
-			new Color(255, 218, 27), new Color(0, 192, 41), // dark green
-//        new Color(43, 24, 255),
-			new Color(0, 45, 255), new Color(221, 84, 177), // purple
-			new Color(159, 252, 51), // light green
-			new Color(144, 246, 249), // sky blue
-			new Color(255, 175, 252), // light purple (fuchsia)
-			Color.BLACK, new Color(128, 128, 128) };
-//    public static final Color COLORKU_INVALID_COLOR = Color.BLACK;
-//    public static final Color COLORKU_DEVIATION_COLOR = new Color(128, 128, 128);
-	public static final Color[] HINT_CANDIDATE_ALS_COLORS = { // Zeichenfarbe für ALS-Candidaten
-			Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK };
-	public static final Color ARROW_COLOR = Color.RED; // Farbe für Pfeile
-	public static final double VALUE_FONT_FACTOR = 0.6; // Zellengröße * valueFontFactor gibt Schriftgröße für
-														// Zellenwerte
-	public static final double CANDIDATE_FONT_FACTOR = 0.25; // Zellengröße * candidateFontFactor gibt Schriftgröße
-																// für Kandidaten
-	public static final double HINT_BACK_FACTOR = 1.6; // um wie viel der Kreis beim Hint größer ist als die Zahl
-	/** How much should the lines around the boxes be thicker than normal lines */
-	public static final double BOX_LINE_FACTOR = 1.5;
-	public static Font DEFAULT_VALUE_FONT = new Font("Tahoma", Font.PLAIN, 10); // Standard für Zellenwerte (Größe
-																				// wird ignoriert)
-	public static Font DEFAULT_CANDIDATE_FONT = new Font("Tahoma", Font.PLAIN, 10); // Standard für Kandidaten (Größe
-																					// wird ignoriert)
-	public static Font BIG_FONT = new Font("Arial", Font.BOLD, 16); // Font für Ausdruck Überschrift
-	public static Font SMALL_FONT = new Font("Arial", Font.PLAIN, 10); // Font für Ausdruck Rating
-	private Color gridColor = GRID_COLOR;
-	private Color innerGridColor = INNER_GRID_COLOR;
-	private Color wrongValueColor = WRONG_VALUE_COLOR;
-	private Color deviationColor = DEVIATION_COLOR;
-	private Color cellFixedValueColor = CELL_FIXED_VALUE_COLOR;
-	private Color cellValueColor = CELL_VALUE_COLOR;
-	private Color candidateColor = CANDIDATE_COLOR;
-	private Color defaultCellColor = DEFAULT_CELL_COLOR;
-	private Color alternateCellColor = ALTERNATE_CELL_COLOR;
-	private Color aktCellColor = AKT_CELL_COLOR;
-	private Color invalidCellColor = INVERSE_FILTER_COLOR;
-	private Color possibleCellColor = FILTER_COLOR;
-	private Color possibleFixedCellColor = FILTER_GIVEN_CELL_COLOR;
-	private Color hintCandidateBackColor = HINT_CANDIDATE_BACK_COLOR;
-	private Color hintCandidateDeleteBackColor = HINT_CANDIDATE_DELETE_BACK_COLOR;
-	private Color hintCandidateCannibalisticBackColor = HINT_CANDIDATE_CANNIBALISTIC_BACK_COLOR;
-	private Color hintCandidateFinBackColor = HINT_CANDIDATE_FIN_BACK_COLOR;
-	private Color hintCandidateEndoFinBackColor = HINT_CANDIDATE_ENDO_FIN_BACK_COLOR;
-	private Color hintCandidateColor = HINT_CANDIDATE_COLOR;
-	private Color hintCandidateDeleteColor = HINT_CANDIDATE_DELETE_COLOR;
-	private Color hintCandidateCannibalisticColor = HINT_CANDIDATE_CANNIBALISTIC_COLOR;
-	private Color hintCandidateFinColor = HINT_CANDIDATE_FIN_COLOR;
-	private Color hintCandidateEndoFinColor = HINT_CANDIDATE_ENDO_FIN_COLOR;
-	private Color[] hintCandidateAlsBackColors = null;
-	private Color[] hintCandidateAlsColors = null;
 //    private Color colorKuInvalidColor = COLORKU_INVALID_COLOR;
 //    private Color colorKuDeviationColor = COLORKU_DEVIATION_COLOR;
-	private Color[] colorKuColors = null;
-	private Color arrowColor = ARROW_COLOR;
 	private double valueFontFactor = VALUE_FONT_FACTOR;
 	private double candidateFontFactor = CANDIDATE_FONT_FACTOR;
 	private double hintBackFactor = HINT_BACK_FACTOR;
 	private double boxLineFactor = BOX_LINE_FACTOR;
-	private Font defaultValueFont = new Font(DEFAULT_VALUE_FONT.getName(), DEFAULT_VALUE_FONT.getStyle(),
-			DEFAULT_VALUE_FONT.getSize());
-	private Font defaultCandidateFont = new Font(DEFAULT_CANDIDATE_FONT.getName(), DEFAULT_CANDIDATE_FONT.getStyle(),
-			DEFAULT_CANDIDATE_FONT.getSize());
-	private Font bigFont = new Font(BIG_FONT.getName(), BIG_FONT.getStyle(), BIG_FONT.getSize());
-	private Font smallFont = new Font(SMALL_FONT.getName(), SMALL_FONT.getStyle(), SMALL_FONT.getSize());
 	public static final String DEFAULT_FILE_DIR = System.getProperty("user.home");
 	public static final String DEFAULT_IMAGE_DIR = System.getProperty("user.home");
 	private String defaultFileDir = DEFAULT_FILE_DIR;
@@ -622,72 +492,15 @@ public final class Options {
 	public static final int GENERATOR_PATTERN_INDEX = -1;
 	private ArrayList<GeneratorPattern> generatorPatterns = new ArrayList<GeneratorPattern>();
 	private int generatorPatternIndex = GENERATOR_PATTERN_INDEX;
-	// Check for available fonts
-	private static String[] availableFontNames = null;
 	// Singleton
 	public static Options instance = null;
 
 	/** Creates a new instance of Options */
 	public Options() {
-
 		difficultyLevels = copyDifficultyLevels(DEFAULT_DIFFICULTY_LEVELS);
 		orgSolverSteps = copyStepConfigs(DEFAULT_SOLVER_STEPS, false, false, true);
 		solverSteps = copyStepConfigs(DEFAULT_SOLVER_STEPS, false, false, false);
 		solverStepsProgress = copyStepConfigs(DEFAULT_SOLVER_STEPS, false, false, false, true);
-
-		hintCandidateAlsBackColors = new Color[HINT_CANDIDATE_ALS_BACK_COLORS.length];
-		for (int i = 0; i < HINT_CANDIDATE_ALS_BACK_COLORS.length; i++) {
-			hintCandidateAlsBackColors[i] = new Color(HINT_CANDIDATE_ALS_BACK_COLORS[i].getRGB());
-		}
-
-		hintCandidateAlsColors = new Color[HINT_CANDIDATE_ALS_COLORS.length];
-		for (int i = 0; i < HINT_CANDIDATE_ALS_COLORS.length; i++) {
-			hintCandidateAlsColors[i] = new Color(HINT_CANDIDATE_ALS_COLORS[i].getRGB());
-		}
-
-		coloringColors = new Color[COLORING_COLORS.length];
-		for (int i = 0; i < COLORING_COLORS.length; i++) {
-			coloringColors[i] = new Color(COLORING_COLORS[i].getRGB());
-		}
-
-		colorKuColors = new Color[COLORKU_COLORS.length];
-		for (int i = 0; i < COLORKU_COLORS.length; i++) {
-			colorKuColors[i] = new Color(COLORKU_COLORS[i].getRGB());
-		}
-
-//    public static final Font DEFAULT_VALUE_FONT = new Font("Tahoma", Font.PLAIN, 10);     // Standard für Zellenwerte (Größe wird ignoriert)
-//    public static final Font DEFAULT_CANDIDATE_FONT = new Font("Tahoma", Font.PLAIN, 10); // Standard für Kandidaten (Größe wird ignoriert)
-//    public static final Font BIG_FONT = new Font("Arial", Font.BOLD, 16);    // Font für Ausdruck Überschrift
-//    public static final Font SMALL_FONT = new Font("Arial", Font.PLAIN, 10); // Font für Ausdruck Rating
-//        // allow for different fonts in different OSes
-//        if (!checkFont(DEFAULT_CANDIDATE_FONT)) {
-//            DEFAULT_CANDIDATE_FONT = new Font(Font.SANS_SERIF, DEFAULT_CANDIDATE_FONT.getStyle(), DEFAULT_CANDIDATE_FONT.getSize());
-//            defaultCandidateFont = new Font(DEFAULT_CANDIDATE_FONT.getName(), DEFAULT_CANDIDATE_FONT.getStyle(), DEFAULT_CANDIDATE_FONT.getSize());
-//        }
-//        if (!checkFont(DEFAULT_VALUE_FONT)) {
-//            DEFAULT_VALUE_FONT = new Font(Font.SANS_SERIF, DEFAULT_VALUE_FONT.getStyle(), DEFAULT_VALUE_FONT.getSize());
-//            defaultValueFont = new Font(DEFAULT_VALUE_FONT.getName(), DEFAULT_VALUE_FONT.getStyle(), DEFAULT_VALUE_FONT.getSize());
-//        }
-//        if (!checkFont(defaultCandidateFont)) {
-//            defaultCandidateFont = new Font(DEFAULT_CANDIDATE_FONT.getName(), DEFAULT_CANDIDATE_FONT.getStyle(), DEFAULT_CANDIDATE_FONT.getSize());
-//        }
-//        if (!checkFont(defaultValueFont)) {
-//            defaultValueFont = new Font(DEFAULT_VALUE_FONT.getName(), DEFAULT_VALUE_FONT.getStyle(), DEFAULT_VALUE_FONT.getSize());
-//        }
-//        if (!checkFont(BIG_FONT)) {
-//            BIG_FONT = new Font(Font.SANS_SERIF, BIG_FONT.getStyle(), BIG_FONT.getSize());
-//            bigFont = new Font(BIG_FONT.getName(), BIG_FONT.getStyle(), BIG_FONT.getSize());
-//        }
-//        if (!checkFont(SMALL_FONT)) {
-//            SMALL_FONT = new Font(Font.SANS_SERIF, SMALL_FONT.getStyle(), SMALL_FONT.getSize());
-//            smallFont = new Font(SMALL_FONT.getName(), SMALL_FONT.getStyle(), SMALL_FONT.getSize());
-//        }
-//        if (!checkFont(bigFont)) {
-//            bigFont = new Font(BIG_FONT.getName(), BIG_FONT.getStyle(), BIG_FONT.getSize());
-//        }
-//        if (!checkFont(smallFont)) {
-//            smallFont = new Font(SMALL_FONT.getName(), SMALL_FONT.getStyle(), SMALL_FONT.getSize());
-//        }
 	}
 
 	/**
@@ -712,59 +525,8 @@ public final class Options {
 		history.add(0, str);
 	}
 
-	/**
-	 * Due to a bug in JRE 1.7_05 this method must not be called befor the first
-	 * JFrame is created or all fonts will always be bold.
-	 */
 	public void checkAllFonts() {
-		// allow for different fonts in different OSes
-		if (!checkFont(DEFAULT_CANDIDATE_FONT)) {
-			DEFAULT_CANDIDATE_FONT = new Font(Font.SANS_SERIF, DEFAULT_CANDIDATE_FONT.getStyle(),
-					DEFAULT_CANDIDATE_FONT.getSize());
-			defaultCandidateFont = new Font(DEFAULT_CANDIDATE_FONT.getName(), DEFAULT_CANDIDATE_FONT.getStyle(),
-					DEFAULT_CANDIDATE_FONT.getSize());
-		}
-		if (!checkFont(DEFAULT_VALUE_FONT)) {
-			DEFAULT_VALUE_FONT = new Font(Font.SANS_SERIF, DEFAULT_VALUE_FONT.getStyle(), DEFAULT_VALUE_FONT.getSize());
-			defaultValueFont = new Font(DEFAULT_VALUE_FONT.getName(), DEFAULT_VALUE_FONT.getStyle(),
-					DEFAULT_VALUE_FONT.getSize());
-		}
-		if (!checkFont(defaultCandidateFont)) {
-			defaultCandidateFont = new Font(DEFAULT_CANDIDATE_FONT.getName(), DEFAULT_CANDIDATE_FONT.getStyle(),
-					DEFAULT_CANDIDATE_FONT.getSize());
-		}
-		if (!checkFont(defaultValueFont)) {
-			defaultValueFont = new Font(DEFAULT_VALUE_FONT.getName(), DEFAULT_VALUE_FONT.getStyle(),
-					DEFAULT_VALUE_FONT.getSize());
-		}
-		if (!checkFont(BIG_FONT)) {
-			BIG_FONT = new Font(Font.SANS_SERIF, BIG_FONT.getStyle(), BIG_FONT.getSize());
-			bigFont = new Font(BIG_FONT.getName(), BIG_FONT.getStyle(), BIG_FONT.getSize());
-		}
-		if (!checkFont(SMALL_FONT)) {
-			SMALL_FONT = new Font(Font.SANS_SERIF, SMALL_FONT.getStyle(), SMALL_FONT.getSize());
-			smallFont = new Font(SMALL_FONT.getName(), SMALL_FONT.getStyle(), SMALL_FONT.getSize());
-		}
-		if (!checkFont(bigFont)) {
-			bigFont = new Font(BIG_FONT.getName(), BIG_FONT.getStyle(), BIG_FONT.getSize());
-		}
-		if (!checkFont(smallFont)) {
-			smallFont = new Font(SMALL_FONT.getName(), SMALL_FONT.getStyle(), SMALL_FONT.getSize());
-		}
-	}
-
-	public boolean checkFont(Font font) {
-		return checkFont(font.getName());
-	}
-
-	public boolean checkFont(String fontName) {
-		if (availableFontNames == null) {
-			availableFontNames = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-		}
-		if (Arrays.binarySearch(availableFontNames, fontName) >= 0) {
-			return true;
-		}
-		return false;
+		// No-op in hodoku-core: font validation is desktop UI specific.
 	}
 
 	/**
@@ -777,7 +539,7 @@ public final class Options {
 
 	public static Options getInstance() {
 		if (instance == null) {
-			readOptions();
+			instance = new Options();
 		}
 		return instance;
 	}
@@ -786,8 +548,7 @@ public final class Options {
 		DifficultyLevel[] dest = new DifficultyLevel[src.length];
 		for (int i = 0; i < src.length; i++) {
 			DifficultyLevel act = src[i];
-			dest[i] = new DifficultyLevel(act.getType(), act.getMaxScore(), act.getName(), act.getBackgroundColor(),
-					act.getForegroundColor());
+			dest[i] = new DifficultyLevel(act.getType(), act.getMaxScore(), act.getName());
 		}
 		return dest;
 	}
@@ -904,35 +665,6 @@ public final class Options {
 	 * difficulty levels are always in the default local. They have to be adjusted
 	 * after the correct locale has been set.
 	 */
-	public void resetDifficultyLevelStrings() {
-//        new DifficultyLevel(DifficultyType.INCOMPLETE, 0, java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.incomplete"), Color.BLACK, Color.WHITE),
-//        new DifficultyLevel(DifficultyType.EASY, 600, java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.easy"), Color.WHITE, Color.BLACK),
-//        new DifficultyLevel(DifficultyType.MEDIUM, 1500, java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.medium"), new Color(100, 255, 100), Color.BLACK),
-//        new DifficultyLevel(DifficultyType.HARD, 3500, java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.hard"), new Color(255, 255, 100), Color.BLACK),
-//        new DifficultyLevel(DifficultyType.UNFAIR, 5000, java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.unfair"), new Color(255, 150, 80), Color.BLACK),
-//        new DifficultyLevel(DifficultyType.EXTREME, Integer.MAX_VALUE, java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.extreme"), new Color(255, 100, 100), Color.BLACK)
-		DEFAULT_DIFFICULTY_LEVELS[0]
-				.setName(java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.incomplete"));
-		DEFAULT_DIFFICULTY_LEVELS[1]
-				.setName(java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.easy"));
-		DEFAULT_DIFFICULTY_LEVELS[2]
-				.setName(java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.medium"));
-		DEFAULT_DIFFICULTY_LEVELS[3]
-				.setName(java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.hard"));
-		DEFAULT_DIFFICULTY_LEVELS[4]
-				.setName(java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.unfair"));
-		DEFAULT_DIFFICULTY_LEVELS[5]
-				.setName(java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.extreme"));
-		difficultyLevels[0]
-				.setName(java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.incomplete"));
-		difficultyLevels[1].setName(java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.easy"));
-		difficultyLevels[2].setName(java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.medium"));
-		difficultyLevels[3].setName(java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.hard"));
-		difficultyLevels[4].setName(java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.unfair"));
-		difficultyLevels[5]
-				.setName(java.util.ResourceBundle.getBundle("intl/MainFrame").getString("MainFrame.extreme"));
-
-	}
 
 	/**
 	 * Returns a String that contains a comma seperated list of all steps, that are
@@ -976,126 +708,6 @@ public final class Options {
 		return tmp.toString();
 	}
 
-	public void writeOptions() throws FileNotFoundException {
-
-		String tmp = System.getProperty("java.io.tmpdir");
-		String fileName = null;
-
-		if (tmp.endsWith(File.separator)) {
-			fileName = tmp + FILE_NAME;
-		} else {
-			fileName = tmp + File.separator + FILE_NAME;
-		}
-
-		// readOptions(System.getProperty("java.io.tmpdir") + File.separator +
-		// FILE_NAME);
-		writeOptions(fileName);
-	}
-
-	public void writeOptions(String fileName) throws FileNotFoundException {
-		Logger.getLogger(Options.class.getName()).log(Level.INFO, "Writing options to {0}", fileName);
-		XMLEncoder out = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(fileName)));
-		out.writeObject(this);
-		out.close();
-	}
-
-	public static void readOptions() {
-		
-		String tmp = System.getProperty("java.io.tmpdir");
-		String fileName = null;
-		
-		if (tmp.endsWith(File.separator)) {
-			fileName = tmp + FILE_NAME;
-		} else {
-			fileName = tmp + File.separator + FILE_NAME;
-		}
-
-		readOptions(fileName);
-	}
-
-	public static void readOptions(String fileName) {
-		
-		Logger.getLogger(Options.class.getName()).log(Level.INFO, "Reading options from {0}", fileName);
-		
-		File file = new File(fileName);
-		boolean isFileEmpty = file.length() == 0;
-		if (isFileEmpty) {
-			if (!file.delete()) {
-				System.out.println("Fatal error, unable to modify: " + fileName);
-			}
-		}
-		
-		try {
-			
-			XMLDecoder in = new XMLDecoder(new BufferedInputStream(new FileInputStream(fileName)));
-			instance = (Options) in.readObject();
-			in.close();
-			
-		} catch (FileNotFoundException ex) {
-			
-			Logger.getLogger(Options.class.getName()).log(Level.INFO, "No config file found");
-
-			instance = new Options();
-			
-			try {
-				instance.writeOptions();
-			} catch (FileNotFoundException exi) {
-				Logger.getLogger(Options.class.getName()).log(Level.SEVERE, "Error writing options", exi);
-			}
-		}
-		
-		// readObject() passt nur orgSolverSteps an,
-		// nicht aber solverSteps -> neu kopieren!
-		// the same for solverStepsProgress
-		instance.solverSteps = instance.copyStepConfigs(instance.orgSolverSteps, false, false, false);
-		instance.solverStepsProgress = instance.copyStepConfigs(instance.orgSolverSteps, false, false, false, true);
-
-		// reduction of standard scores in v 2.2 could lead to strange effects, if a
-		// user had
-		// changed the level scores manually (max scores could get out of order)
-		// we can't have this
-		boolean changed = false;
-		int maxScore = instance.difficultyLevels[1].getMaxScore();
-		for (int i = 2; i < instance.difficultyLevels.length; i++) {
-			
-			if (instance.difficultyLevels[i].getMaxScore() <= maxScore) {
-				instance.difficultyLevels[i].setMaxScore(maxScore + 100);
-				changed = true;
-			}
-			
-			maxScore = instance.difficultyLevels[i].getMaxScore();
-		}
-		
-		if (changed) {
-			BackgroundGeneratorThread.getInstance().resetAll();
-		}
-	}
-
-	/*
-	public static void main(String[] args) {
-		Options options = new Options();
-		try {
-			XMLEncoder out = new XMLEncoder(new BufferedOutputStream(new FileOutputStream("L:\\dummy.xml")));
-			out.writeObject(options);
-			out.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		try {
-			XMLDecoder in = new XMLDecoder(new BufferedInputStream(new FileInputStream("L:\\dummy.xml")));
-			// out.setPersistenceDelegate(StepConfig[].class, new
-			// SolverStepsPersistenceDelegate());
-			options = (Options) in.readObject();
-			in.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		System.out.println(options.solverSteps.length);
-		for (int i = 0; i < options.solverSteps.length; i++) {
-			System.out.println(i + ": " + options.solverSteps[i]);
-		}
-	}*/
 
 	/**
 	 * @return the historyOfCreatedPuzzles
@@ -1455,16 +1067,10 @@ public final class Options {
 	/**
 	 * @return the alternateCellColor
 	 */
-	public Color getAlternateCellColor() {
-		return alternateCellColor;
-	}
 
 	/**
 	 * @param alternateCellColor the alternateCellColor to set
 	 */
-	public void setAlternateCellColor(Color alternateCellColor) {
-		this.alternateCellColor = alternateCellColor;
-	}
 
 	/**
 	 * @return the useOrInsteadOfAndForFilter
@@ -1522,23 +1128,29 @@ public final class Options {
 		this.allStepsAlsChainLength = allStepsAlsChainLength;
 	}
 
+	public int[] getColoringColors() {
+		return coloringColors;
+	}
+
+	public void setColoringColors(int[] coloringColors) {
+		if (coloringColors == null || coloringColors.length == 0) {
+			this.coloringColors = Arrays.copyOf(COLORING_COLORS, COLORING_COLORS.length);
+			return;
+		}
+		this.coloringColors = Arrays.copyOf(coloringColors, coloringColors.length);
+	}
+
 	/**
 	 * @return the colorKuColors
 	 */
-	public Color[] getColorKuColors() {
-		return colorKuColors;
-	}
 
-	public Color getColorKuColor(int n) {
-		return (((n >= 1) && (n <= colorKuColors.length)) ? colorKuColors[n - 1] : Color.black);
+	public int getColorKuColor(int n) {
+		return 0;
 	}
 
 	/**
 	 * @param colorKuColors the colorKuColors to set
 	 */
-	public void setColorKuColors(Color[] colorKuColors) {
-		this.colorKuColors = colorKuColors;
-	}
 
 	/**
 	 * @return the colorCells
@@ -1714,205 +1326,55 @@ public final class Options {
 		this.drawMode = drawMode;
 	}
 
-	public Color getGridColor() {
-		return gridColor;
-	}
 
-	public void setGridColor(Color gridColor) {
-		this.gridColor = gridColor;
-	}
 
-	public Color getInnerGridColor() {
-		return innerGridColor;
-	}
 
-	public void setInnerGridColor(Color innerGridColor) {
-		this.innerGridColor = innerGridColor;
-	}
 
-	public Color getWrongValueColor() {
-		return wrongValueColor;
-	}
 
-	public void setWrongValueColor(Color wrongValueColor) {
-		this.wrongValueColor = wrongValueColor;
-	}
 
-	public Color getDeviationColor() {
-		return deviationColor;
-	}
 
-	public void setDeviationColor(Color deviationColor) {
-		this.deviationColor = deviationColor;
-	}
 
-	public Color getCellFixedValueColor() {
-		return cellFixedValueColor;
-	}
 
-	public void setCellFixedValueColor(Color cellFixedValueColor) {
-		this.cellFixedValueColor = cellFixedValueColor;
-	}
 
-	public Color getCellValueColor() {
-		return cellValueColor;
-	}
 
-	public void setCellValueColor(Color cellValueColor) {
-		this.cellValueColor = cellValueColor;
-	}
 
-	public Color getCandidateColor() {
-		return candidateColor;
-	}
 
-	public void setCandidateColor(Color candidateColor) {
-		this.candidateColor = candidateColor;
-	}
 
-	public Color getDefaultCellColor() {
-		return defaultCellColor;
-	}
 
-	public void setDefaultCellColor(Color defaultCellColor) {
-		this.defaultCellColor = defaultCellColor;
-	}
 
-	public Color getAktCellColor() {
-		return aktCellColor;
-	}
 
-	public void setAktCellColor(Color aktCellColor) {
-		this.aktCellColor = aktCellColor;
-	}
 
-	public Color getInvalidCellColor() {
-		return invalidCellColor;
-	}
 
-	public void setInvalidCellColor(Color invalidCellColor) {
-		this.invalidCellColor = invalidCellColor;
-	}
 
-	public Color getPossibleCellColor() {
-		return possibleCellColor;
-	}
 
-	public void setPossibleCellColor(Color possibleCellColor) {
-		this.possibleCellColor = possibleCellColor;
-	}
 	
-	public Color getPossibleFixedCellColor() {
-		return possibleFixedCellColor;
-	}
 
-	public void setPossibleFixedCellColor(Color possibleFixedCellColor) {
-		this.possibleFixedCellColor = possibleFixedCellColor;
-	}
 
-	public Color getHintCandidateBackColor() {
-		return hintCandidateBackColor;
-	}
 
-	public void setHintCandidateBackColor(Color hintCandidateBackColor) {
-		this.hintCandidateBackColor = hintCandidateBackColor;
-	}
 
-	public Color getHintCandidateDeleteBackColor() {
-		return hintCandidateDeleteBackColor;
-	}
 
-	public void setHintCandidateDeleteBackColor(Color hintCandidateDeleteBackColor) {
-		this.hintCandidateDeleteBackColor = hintCandidateDeleteBackColor;
-	}
 
-	public Color getHintCandidateCannibalisticBackColor() {
-		return hintCandidateCannibalisticBackColor;
-	}
 
-	public void setHintCandidateCannibalisticBackColor(Color hintCandidateCannibalisticBackColor) {
-		this.hintCandidateCannibalisticBackColor = hintCandidateCannibalisticBackColor;
-	}
 
-	public Color getHintCandidateFinBackColor() {
-		return hintCandidateFinBackColor;
-	}
 
-	public void setHintCandidateFinBackColor(Color hintCandidateFinBackColor) {
-		this.hintCandidateFinBackColor = hintCandidateFinBackColor;
-	}
 
-	public Color getHintCandidateEndoFinBackColor() {
-		return hintCandidateEndoFinBackColor;
-	}
 
-	public void setHintCandidateEndoFinBackColor(Color hintCandidateEndoFinBackColor) {
-		this.hintCandidateEndoFinBackColor = hintCandidateEndoFinBackColor;
-	}
 
-	public Color getHintCandidateColor() {
-		return hintCandidateColor;
-	}
 
-	public void setHintCandidateColor(Color hintCandidateColor) {
-		this.hintCandidateColor = hintCandidateColor;
-	}
 
-	public Color getHintCandidateDeleteColor() {
-		return hintCandidateDeleteColor;
-	}
 
-	public void setHintCandidateDeleteColor(Color hintCandidateDeleteColor) {
-		this.hintCandidateDeleteColor = hintCandidateDeleteColor;
-	}
 
-	public Color getHintCandidateCannibalisticColor() {
-		return hintCandidateCannibalisticColor;
-	}
 
-	public void setHintCandidateCannibalisticColor(Color hintCandidateCannibalisticColor) {
-		this.hintCandidateCannibalisticColor = hintCandidateCannibalisticColor;
-	}
 
-	public Color getHintCandidateFinColor() {
-		return hintCandidateFinColor;
-	}
 
-	public void setHintCandidateFinColor(Color hintCandidateFinColor) {
-		this.hintCandidateFinColor = hintCandidateFinColor;
-	}
 
-	public Color getHintCandidateEndoFinColor() {
-		return hintCandidateEndoFinColor;
-	}
 
-	public void setHintCandidateEndoFinColor(Color hintCandidateEndoFinColor) {
-		this.hintCandidateEndoFinColor = hintCandidateEndoFinColor;
-	}
 
-	public Color[] getHintCandidateAlsBackColors() {
-		return hintCandidateAlsBackColors;
-	}
 
-	public void setHintCandidateAlsBackColors(Color[] hintCandidateAlsBackColors) {
-		this.hintCandidateAlsBackColors = hintCandidateAlsBackColors;
-	}
 
-	public Color[] getHintCandidateAlsColors() {
-		return hintCandidateAlsColors;
-	}
 
-	public void setHintCandidateAlsColors(Color[] hintCandidateAlsColors) {
-		this.hintCandidateAlsColors = hintCandidateAlsColors;
-	}
 
-	public Color getArrowColor() {
-		return arrowColor;
-	}
 
-	public void setArrowColor(Color arrowColor) {
-		this.arrowColor = arrowColor;
-	}
 
 	public double getValueFontFactor() {
 		return valueFontFactor;
@@ -1938,37 +1400,13 @@ public final class Options {
 		this.hintBackFactor = hintBackFactor;
 	}
 
-	public Font getDefaultValueFont() {
-		return defaultValueFont;
-	}
 
-	public void setDefaultValueFont(Font defaultValueFont) {
-		this.defaultValueFont = defaultValueFont;
-	}
 
-	public Font getDefaultCandidateFont() {
-		return defaultCandidateFont;
-	}
 
-	public void setDefaultCandidateFont(Font defaultCandidateFont) {
-		this.defaultCandidateFont = defaultCandidateFont;
-	}
 
-	public Font getBigFont() {
-		return bigFont;
-	}
 
-	public void setBigFont(Font bigFont) {
-		this.bigFont = bigFont;
-	}
 
-	public Font getSmallFont() {
-		return smallFont;
-	}
 
-	public void setSmallFont(Font smallFont) {
-		this.smallFont = smallFont;
-	}
 
 	public DifficultyLevel[] getDifficultyLevels() {
 		return difficultyLevels;
@@ -2002,13 +1440,7 @@ public final class Options {
 		this.anzTableLookAhead = anzTableLookAhead;
 	}
 
-	public Color[] getColoringColors() {
-		return coloringColors;
-	}
 
-	public void setColoringColors(Color[] coloringColors1) {
-		this.coloringColors = coloringColors1;
-	}
 
 	public String getLanguage() {
 		return language;

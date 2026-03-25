@@ -18,7 +18,6 @@
  */
 package sudoku;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -77,8 +76,8 @@ public class GuiState {
 	private Stack<Sudoku2> redoStack = null;
 	private SolutionStep step = null;
 	private int chainIndex = -1;
-	private SortedMap<Integer, Color> coloringMap = null;
-	private SortedMap<Integer, Color> coloringCandidateMap = null;
+	private SortedMap<Integer, Integer> coloringMap = null;
+	private SortedMap<Integer, Integer> coloringCandidateMap = null;
 
 	// items from SudokuSolver
 	private List<SolutionStep> steps;
@@ -296,28 +295,28 @@ public class GuiState {
 	/**
 	 * @return the coloringMap
 	 */
-	public SortedMap<Integer, Color> getColoringMap() {
+	public SortedMap<Integer, Integer> getColoringMap() {
 		return coloringMap;
 	}
 
 	/**
 	 * @param coloringMap the coloringMap to set
 	 */
-	public void setColoringMap(SortedMap<Integer, Color> coloringMap) {
+	public void setColoringMap(SortedMap<Integer, Integer> coloringMap) {
 		this.coloringMap = coloringMap;
 	}
 
 	/**
 	 * @return the coloringCandidateMap
 	 */
-	public SortedMap<Integer, Color> getColoringCandidateMap() {
+	public SortedMap<Integer, Integer> getColoringCandidateMap() {
 		return coloringCandidateMap;
 	}
 
 	/**
 	 * @param coloringCandidateMap the coloringCandidateMap to set
 	 */
-	public void setColoringCandidateMap(SortedMap<Integer, Color> coloringCandidateMap) {
+	public void setColoringCandidateMap(SortedMap<Integer, Integer> coloringCandidateMap) {
 		this.coloringCandidateMap = coloringCandidateMap;
 	}
 

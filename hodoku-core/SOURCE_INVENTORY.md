@@ -1,12 +1,12 @@
 # HoDoKu source inventory
 
-This document tracks exactly what was imported from HoDoKu and what was removed during the first non-UI extraction pass.
+This document tracks exactly what was imported from HoDoKu and what was removed during the non-UI extraction and desktop-coupling cleanup.
 
 ## Summary
 
 - Original HoDoKu Java files: **108**
-- Kept in `hodoku-core`: **60**
-- Removed from `hodoku-core`: **48**
+- Kept in `hodoku-core`: **57**
+- Removed from `hodoku-core`: **51**
 - Added brand-new files: **0** (all retained paths come from original HoDoKu paths)
 
 ## Kept files with notable changes
@@ -22,6 +22,10 @@ The following kept files were intentionally replaced with non-UI compatibility i
 | `sudoku/SolverProgressDialog.java` | Replaced with non-Swing wrapper used by `SudokuSolver.solve(boolean)` |
 | `sudoku/SudokuPanel.java` | Replaced with minimal state-bridge stub for `GuiState` |
 | `sudoku/SudokuUtil.java` | Replaced with non-UI utility subset (`clearStepList*`, `combinations`, no-op look-and-feel) |
+| `generator/BackgroundGenerator.java` | Removed AWT `EventQueue` usage; progress callbacks are now direct |
+| `sudoku/DifficultyLevel.java` | Removed AWT `Color` fields; now stores only type/maxScore/name |
+| `sudoku/GuiState.java` | Removed AWT `Color` types from coloring maps (uses integer color ids) |
+| `sudoku/Options.java` | Removed desktop serialization/font/color dependencies; kept solver configuration |
 
 ## Full kept file list
 
@@ -57,7 +61,6 @@ sudoku/AlsInSolutionStep.java
 sudoku/Candidate.java
 sudoku/Chain.java
 sudoku/ClipboardMode.java
-sudoku/ColorKuImage.java
 sudoku/DifficultyLevel.java
 sudoku/DifficultyType.java
 sudoku/Entity.java
@@ -66,10 +69,8 @@ sudoku/GameMode.java
 sudoku/GenerateSudokuProgressDialog.java
 sudoku/GuiState.java
 sudoku/ListDragAndDropChange.java
-sudoku/MyBrowserLauncher.java
 sudoku/Options.java
 sudoku/RegressionTester.java
-sudoku/RelativeLayout.java
 sudoku/SolutionCategory.java
 sudoku/SolutionPanel.java
 sudoku/SolutionStep.java
@@ -120,17 +121,20 @@ sudoku/KeyboardLayoutFrame.java
 sudoku/ListDragAndDrop.java
 sudoku/Main.java
 sudoku/MainFrame.java
+sudoku/MyBrowserLauncher.java
 sudoku/MyFontChooser.java
 sudoku/NumbersOnlyDocument.java
 sudoku/PrintSolutionDialog.java
 sudoku/ProgressChecker.java
 sudoku/RestoreSavePointDialog.java
 sudoku/RightClickMenu.java
+sudoku/ColorKuImage.java
 sudoku/SetGivensDialog.java
 sudoku/SplitPanel.java
 sudoku/StatusColorPanel.java
 sudoku/SudokuConsoleFrame.java
 sudoku/SummaryPanel.java
+sudoku/RelativeLayout.java
 sudoku/UIBorderedImagePanel.java
 sudoku/UIColorPalette.java
 sudoku/UIColorTools.java
@@ -140,4 +144,19 @@ sudoku/UIQuickBrowse.java
 sudoku/UIToggleButton.java
 sudoku/WriteAsPNGDialog.java
 ```
+
+## Runtime resources kept for core
+
+Only these HoDoKu bundles are still required by current core code paths:
+
+```text
+templates.dat
+intl/SolutionStep.properties
+intl/SolutionStep_de.properties
+intl/SolutionType.properties
+intl/SolutionType_de.properties
+```
+
+Other `intl/*.properties` files from desktop dialogs/panels were removed as unused by solver/generator/rating in `hodoku-core`.
+
 
