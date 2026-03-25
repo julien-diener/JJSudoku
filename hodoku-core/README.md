@@ -22,6 +22,11 @@ This module currently contains:
 
 This module deliberately removes desktop UI entry points and Swing-heavy panels/dialogs.
 
+## Public API contract
+
+Current core-facing public entry points are documented in `hodoku-core/API_PUBLIC_SURFACE.md`.
+Use this contract as the baseline for integration tests and future refactoring.
+
 ## What was removed
 
 - Swing-based dialog/panel/frame classes from the original `sudoku` package,
