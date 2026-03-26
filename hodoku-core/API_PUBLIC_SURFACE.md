@@ -4,6 +4,12 @@ This document defines the current public API to treat as external contract for `
 
 ## Primary app-facing API
 
+- `org.jjgame.hodoku.HodokuPuzzleGenerator.generate(difficulty, maxAttempts = 100)`
+  - Input: `DifficultyType` (EASY/MEDIUM/HARD/UNFAIR/EXTREME), optional attempt budget.
+  - Output: `GenerationResult.Success(puzzle)` or `GenerationResult.BestEffort(closest, attempts)`.
+  - Never throws on exhausted budget — always returns the closest puzzle found.
+  - `GeneratedPuzzle` carries `clues: IntArray` (81 values, 0 = empty) and `rating: HodokuRating`.
+
 - `org.jjgame.hodoku.HodokuDifficultyRater.rate(IntArray)`
   - Input: 81 values in `[0..9]`, `0` for empty.
   - Output: `HodokuRating(solved, difficulty, score)`.

@@ -1,7 +1,9 @@
 package org.jjgame.hodoku.tools
 
 import generator.SudokuGeneratorFactory
+import org.jjgame.hodoku.GenerationResult
 import org.jjgame.hodoku.HodokuDifficultyRater
+import org.jjgame.hodoku.HodokuPuzzleGenerator
 import sudoku.DifficultyType
 
 /**
@@ -41,7 +43,7 @@ object GenerationDistributionProbeMain {
         val totalGen = genTimes.sum()
         val totalRate = rateTimes.sum()
         val avgGen = totalGen / n
-        val avgRate   = totalRate / n
+        val avgRate = totalRate / n
         val maxGen = genTimes.max()
         val maxRate = rateTimes.max()
 
@@ -75,7 +77,20 @@ object GenerationDistributionProbeMain {
             }
         }
         println()
+
+        println("=== HodokuPuzzleGenerator.generate() spot check ===")
+        listOf(DifficultyType.EASY, DifficultyType.HARD, DifficultyType.EXTREME).forEach { target ->
+            val t = System.currentTimeMillis()
+            val result = HodokuPuzzleGenerator.generate(target, maxAttempts = 50)
+            val elapsed = System.currentTimeMillis() - t
+            when (result) {
+                is GenerationResult.Success ->
+                    println("  $target -> SUCCESS  score=${result.puzzle.rating.score}  ${elapsed}ms")
+                is GenerationResult.BestEffort ->
+                    println("  $target -> BEST_EFFORT after ${result.attempts} attempts  " +
+                        "got=${result.best.rating.difficulty}  score=${result.best.rating.score}  ${elapsed}ms")
+            }
+        }
+        println()
     }
 }
-
-
