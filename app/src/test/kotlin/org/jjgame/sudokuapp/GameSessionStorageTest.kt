@@ -18,7 +18,7 @@ class GameSessionStorageTest {
         val restored = GameSessionStorage.decode(readFixture("game-session-v1.json"))
 
         assertNotNull(restored)
-        assertEquals(Difficulty.MEDIUM, restored?.difficulty)
+            assertEquals(Difficulty.MEDIUM, restored?.difficulty)
         val cellCount = restored!!.session.puzzle.mapCells { _, _ -> Unit }.size
         assertEquals(81, cellCount)
 
@@ -39,7 +39,7 @@ class GameSessionStorageTest {
         val restored = GameSessionStorage.decode(readFixture("game-session-v2.json"))
 
         assertNotNull(restored)
-        assertEquals(Difficulty.MEDIUM, restored?.difficulty)
+            assertEquals(Difficulty.MEDIUM, restored?.difficulty)
         assertEquals(1742812800000L, restored!!.session.startedAt)
         assertEquals(742L, restored.session.elapsedSeconds)
         assertEquals(1742813542000L, restored.session.finishedAt)
@@ -78,7 +78,7 @@ class GameSessionStorageTest {
         val restored = GameSessionStorage.decode(encoded)
 
         assertNotNull(restored)
-        assertEquals(Difficulty.HARD, restored?.difficulty)
+            assertEquals(Difficulty.HARD, restored?.difficulty)
         assertEquals(session.puzzle, restored?.session?.puzzle)
         assertEquals(1742812800000L, restored?.session?.startedAt)
         assertEquals(300L, restored?.session?.elapsedSeconds)

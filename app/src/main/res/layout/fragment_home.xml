@@ -61,6 +61,22 @@
         android:layout_height="50dp"
         android:text="Hard"
         android:textSize="16sp"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnUnfair"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="Unfair"
+        android:textSize="16sp"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnExtreme"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="Extreme"
+        android:textSize="16sp"
         android:layout_marginBottom="32dp" />
 
 </LinearLayout>

@@ -1,23 +1,31 @@
 package org.jjgame.hodoku
 
 import generator.SudokuGeneratorFactory
+import solver.SudokuSolver
 import sudoku.DifficultyType
+import sudoku.Sudoku2
 
 /**
  * Result of a puzzle generation attempt.
  *
  * [clues] is a 81-element int array (0 = empty, 1-9 = given).
+ * [solution] is the solved 81-cell grid (1-9 values).
  * [rating] is the HoDoKu difficulty rating of the generated puzzle.
  */
 data class GeneratedPuzzle(
     val clues: IntArray,
+    val solution: IntArray,
     val rating: HodokuRating,
 ) {
     // IntArray does not implement structural equals by default
     override fun equals(other: Any?): Boolean =
-        other is GeneratedPuzzle && clues.contentEquals(other.clues) && rating == other.rating
+        other is GeneratedPuzzle &&
+            clues.contentEquals(other.clues) &&
+            solution.contentEquals(other.solution) &&
+            rating == other.rating
 
-    override fun hashCode(): Int = 31 * clues.contentHashCode() + rating.hashCode()
+    override fun hashCode(): Int =
+        31 * (31 * clues.contentHashCode() + solution.contentHashCode()) + rating.hashCode()
 }
 
 /**
@@ -83,17 +91,17 @@ object HodokuPuzzleGenerator {
             repeat(maxAttempts) {
                 val puzzle = generator.generateSudoku(false)
                 val clues = puzzle.values.copyOf()
-                val rating = HodokuDifficultyRater.rate(clues)
+                val generated = rateAndSolve(clues)
 
-                if (rating.difficulty == difficulty) {
-                    return GenerationResult.Success(GeneratedPuzzle(clues, rating))
+                if (generated.rating.difficulty == difficulty) {
+                    return GenerationResult.Success(generated)
                 }
 
                 // Track closest puzzle by score distance to the target band midpoint
-                val distance = scoreDistance(rating, difficulty)
+                val distance = scoreDistance(generated.rating, difficulty)
                 if (distance < bestDistance) {
                     bestDistance = distance
-                    best = GeneratedPuzzle(clues, rating)
+                    best = generated
                 }
             }
         } finally {
@@ -117,6 +125,28 @@ object HodokuPuzzleGenerator {
             DifficultyType.INCOMPLETE -> 0
         }
         return Math.abs(rating.score - targetMidpoint)
+    }
+
+    private fun rateAndSolve(clues: IntArray): GeneratedPuzzle {
+        val grid = Sudoku2().apply { setSudoku(toHodokuGridString(clues), true) }
+        val solver = SudokuSolver().apply { setSudoku(grid) }
+        val solved = solver.solve(false)
+        val rating = HodokuRating(
+            solved = solved,
+            difficulty = solver.level.type,
+            score = solver.score,
+        )
+        return GeneratedPuzzle(
+            clues = clues.copyOf(),
+            solution = grid.values.copyOf(),
+            rating = rating,
+        )
+    }
+
+    private fun toHodokuGridString(clues: IntArray): String = buildString(81) {
+        for (value in clues) {
+            append(if (value == 0) '.' else ('0' + value))
+        }
     }
 }
 

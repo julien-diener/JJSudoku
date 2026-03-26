@@ -11,6 +11,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(project(":hodoku-core"))
     testImplementation(kotlin("test"))
 }
 

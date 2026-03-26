@@ -16,6 +16,8 @@ class HomeFragment : Fragment() {
     private lateinit var btnEasy: Button
     private lateinit var btnMedium: Button
     private lateinit var btnHard: Button
+    private lateinit var btnUnfair: Button
+    private lateinit var btnExtreme: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,9 +33,11 @@ class HomeFragment : Fragment() {
         gameViewModel = ViewModelProvider(requireActivity())[SudokuGameViewModel::class.java]
 
         btnContinueGame = view.findViewById(R.id.btnContinueGame)
-        btnEasy = view.findViewById(R.id.btnEasy)
-        btnMedium = view.findViewById(R.id.btnMedium)
-        btnHard = view.findViewById(R.id.btnHard)
+        btnEasy    = view.findViewById(R.id.btnEasy)
+        btnMedium  = view.findViewById(R.id.btnMedium)
+        btnHard    = view.findViewById(R.id.btnHard)
+        btnUnfair  = view.findViewById(R.id.btnUnfair)
+        btnExtreme = view.findViewById(R.id.btnExtreme)
 
         // Show "Continue Game" button only if a saved game exists
         if (gameViewModel.hasSavedGame()) {
@@ -44,9 +48,11 @@ class HomeFragment : Fragment() {
             }
         }
 
-        btnEasy.setOnClickListener { startNewGame(Difficulty.EASY) }
-        btnMedium.setOnClickListener { startNewGame(Difficulty.MEDIUM) }
-        btnHard.setOnClickListener { startNewGame(Difficulty.HARD) }
+        btnEasy.setOnClickListener    { startNewGame(Difficulty.EASY)    }
+        btnMedium.setOnClickListener  { startNewGame(Difficulty.MEDIUM)  }
+        btnHard.setOnClickListener    { startNewGame(Difficulty.HARD)    }
+        btnUnfair.setOnClickListener  { startNewGame(Difficulty.UNFAIR)  }
+        btnExtreme.setOnClickListener { startNewGame(Difficulty.EXTREME) }
     }
 
     private fun startNewGame(difficulty: Difficulty) {
@@ -62,4 +68,3 @@ class HomeFragment : Fragment() {
             .commit()
     }
 }
-
