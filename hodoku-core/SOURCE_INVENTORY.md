@@ -5,8 +5,8 @@ This document tracks exactly what was imported from HoDoKu and what was removed 
 ## Summary
 
 - Original HoDoKu Java files: **108**
-- Kept in `hodoku-core`: **57**
-- Removed from `hodoku-core`: **51**
+- Kept in `hodoku-core`: **54**
+- Removed from `hodoku-core`: **54**
 - Added brand-new files: **0** (all retained paths come from original HoDoKu paths)
 
 ## Kept files with notable changes
@@ -18,13 +18,10 @@ The following kept files were intentionally replaced with non-UI compatibility i
 |---|---|
 | `sudoku/FindAllStepsProgressDialog.java` | Replaced with minimal no-op progress callback stub |
 | `sudoku/GenerateSudokuProgressDialog.java` | Replaced with minimal no-op progress callback stub |
-| `sudoku/SolutionPanel.java` | Replaced with minimal state-bridge stub for `GuiState` |
 | `sudoku/SolverProgressDialog.java` | Replaced with non-Swing wrapper used by `SudokuSolver.solve(boolean)` |
-| `sudoku/SudokuPanel.java` | Replaced with minimal state-bridge stub for `GuiState` |
 | `sudoku/SudokuUtil.java` | Replaced with non-UI utility subset (`clearStepList*`, `combinations`, no-op look-and-feel) |
 | `generator/BackgroundGenerator.java` | Removed AWT `EventQueue` usage; progress callbacks are now direct |
 | `sudoku/DifficultyLevel.java` | Removed AWT `Color` fields; now stores only type/maxScore/name |
-| `sudoku/GuiState.java` | Removed AWT `Color` types from coloring maps (uses integer color ids) |
 | `sudoku/Options.java` | Removed desktop serialization/font/color dependencies; kept solver configuration |
 
 ## Full kept file list
@@ -67,12 +64,10 @@ sudoku/Entity.java
 sudoku/FindAllStepsProgressDialog.java
 sudoku/GameMode.java
 sudoku/GenerateSudokuProgressDialog.java
-sudoku/GuiState.java
 sudoku/ListDragAndDropChange.java
 sudoku/Options.java
 sudoku/RegressionTester.java
 sudoku/SolutionCategory.java
-sudoku/SolutionPanel.java
 sudoku/SolutionStep.java
 sudoku/SolutionType.java
 sudoku/SolverProgressDialog.java
@@ -80,7 +75,6 @@ sudoku/StepConfig.java
 sudoku/Sudoku.java
 sudoku/Sudoku2.java
 sudoku/SudokuCell.java
-sudoku/SudokuPanel.java
 sudoku/SudokuSet.java
 sudoku/SudokuSetBase.java
 sudoku/SudokuSetShort.java
@@ -116,6 +110,7 @@ sudoku/FileDrop.java
 sudoku/FindAllSteps.java
 sudoku/FishChooseCandidatesDialog.java
 sudoku/GeneratorPatternPanel.java
+sudoku/GuiState.java
 sudoku/HistoryDialog.java
 sudoku/KeyboardLayoutFrame.java
 sudoku/ListDragAndDrop.java
@@ -133,6 +128,8 @@ sudoku/SetGivensDialog.java
 sudoku/SplitPanel.java
 sudoku/StatusColorPanel.java
 sudoku/SudokuConsoleFrame.java
+sudoku/SudokuPanel.java
+sudoku/SolutionPanel.java
 sudoku/SummaryPanel.java
 sudoku/RelativeLayout.java
 sudoku/UIBorderedImagePanel.java

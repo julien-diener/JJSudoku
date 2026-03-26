@@ -41,9 +41,7 @@ The extraction currently prioritizes keeping algorithm behavior while removing U
 Some original types are still referenced by algorithm classes, so a few files were replaced by minimal non-UI compatibility stubs:
 - `sudoku/FindAllStepsProgressDialog.java`
 - `sudoku/GenerateSudokuProgressDialog.java`
-- `sudoku/SolutionPanel.java`
 - `sudoku/SolverProgressDialog.java`
-- `sudoku/SudokuPanel.java`
 - `sudoku/SudokuUtil.java`
 
 These stubs keep method signatures used by solver/generator code paths and are intentionally no-op for UI behavior.
@@ -61,5 +59,14 @@ The current extraction is validated by running module tests:
 ```bash
 cd /path/to/JJSudoku
 ./gradlew :hodoku-core:test --no-daemon
+```
+
+## Optional probe tool
+
+To sample natural generation difficulty distribution and timing (without test assertions):
+
+```bash
+cd /path/to/JJSudoku
+./gradlew :hodoku-core:probeGenerationDistribution --args="100"
 ```
 

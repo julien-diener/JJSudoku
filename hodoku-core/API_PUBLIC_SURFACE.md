@@ -41,8 +41,5 @@ This document defines the current public API to treat as external contract for `
 
 These types remain public to preserve existing solver signatures but are not primary app-facing contracts:
 
-- `sudoku.GuiState`
 - `sudoku.SolverProgressDialog`
-- `sudoku.SolutionPanel`
-- `sudoku.SudokuPanel`
 
