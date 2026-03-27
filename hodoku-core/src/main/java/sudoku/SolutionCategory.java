@@ -62,10 +62,6 @@ public enum SolutionCategory {
 		return categoryName;
 	}
 
-	public void setCategoryName(String name) {
-		categoryName = name;
-	}
-
 	public boolean isFish() {
 		if (this == BASIC_FISH || this == FINNED_BASIC_FISH || this == FRANKEN_FISH || this == FINNED_FRANKEN_FISH
 				|| this == MUTANT_FISH || this == FINNED_MUTANT_FISH) {

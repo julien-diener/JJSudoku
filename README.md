@@ -106,8 +106,7 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
   - [ ] best time tracking
   - [ ] be able to replay it step by step?
 - [ ] add about page with features, how to play, maybe todo, license, author, etc.
-- [ ] work on difficulty (with guaranteed unique solution, hard is too simple) 
-  - maybe use some heuristics to make it more human-like
+- [x] work on difficulty (with guaranteed unique solution, hard is too simple)
 - [ ] manage horizontal display
 - [ ] improve appearance
   - [ ] maybe add theme system, such as dark mode
@@ -121,6 +120,7 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
 - [x] when finished, home should not show continue game. Maybe clear storage?
 - [ ] plug in github automatic build, with test coverage etc... if possible (and free)
 - [ ] add to google play store
+- [ ] convert hodoku core to kotlin
 
 
 ## Publishing to Google Play Store

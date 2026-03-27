@@ -70,3 +70,38 @@ cd /path/to/JJSudoku
 ./gradlew :hodoku-core:probeGenerationDistribution --args="100"
 ```
 
+## Hint dataset POC
+
+`hodoku-core` now includes a second probe that mines solver steps into a training-oriented dataset.
+
+- output format: JSON Lines (`.jsonl`)
+- grouping: `<outputDir>/<SolutionCategory>/<SolutionType>.jsonl`
+- one line = one pre-step hint sample
+
+Default run:
+
+```bash
+cd /path/to/JJSudoku
+./gradlew :hodoku-core:probeHintDataset
+```
+
+Custom run example:
+
+```bash
+cd /path/to/JJSudoku
+./gradlew :hodoku-core:probeHintDataset --args="--outputDir=build/hint-dataset --difficulty=HARD --perType=30 --maxPuzzles=1000 --types=HIDDEN_SINGLE,LOCKED_CANDIDATES_1,X_WING"
+```
+
+Current schema fields include:
+- `sourcePuzzle`: original puzzle grid (1-9 or `.` for empty)
+- `puzzleBeforeStep`: puzzle state immediately before the hint was applied
+- `solutionValue`: for SET actions, the digit (1-9) that should be placed
+- `puzzleAfterStep`: puzzle state after applying the hint
+- `sourceDifficulty`, `solutionCategory`, `solutionType`
+- `action`: `SET` (place digit) or `ELIMINATION` (remove candidate)
+- `targetCell`: cell index (0-80) affected
+- `targetValue`: digit (1-9) involved
+- `eliminations`: list of `{index, value}` pairs to eliminate
+- `candidateCountBefore`: candidate count before the hint
+- `stepText`: human-readable hint description
+
