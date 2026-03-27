@@ -37,23 +37,20 @@ public final class StepConfig implements Cloneable, Comparable<StepConfig> {
 	private boolean enabledTraining; // enabled for traing/practising mode
 
 	/** Creates a new instance of StepConfig */
-	public StepConfig() {
-	}
-
 	public StepConfig(int index, SolutionType type, int level, SolutionCategory category, int baseScore, int adminScore,
 			boolean enabled, boolean allStepsEnabled, int indexProgress, boolean enabledProgress,
 			boolean enabledTraining) {
-		setIndex(index);
-		setType(type);
-		setLevel(level);
-		setCategory(category);
-		setBaseScore(baseScore);
-		setAdminScore(adminScore);
-		setEnabled(enabled);
-		setAllStepsEnabled(allStepsEnabled);
-		setIndexProgress(indexProgress);
-		setEnabledProgress(enabledProgress);
-		setEnabledTraining(enabledTraining);
+		this.index = index;
+		this.type = type;
+		this.level = level;
+		this.category = category;
+		this.baseScore = baseScore;
+		this.adminScore = adminScore;
+		this.enabled = enabled;
+		this.allStepsEnabled = allStepsEnabled;
+		this.indexProgress = indexProgress;
+		this.enabledProgress = enabledProgress;
+		this.enabledTraining = enabledTraining;
 	}
 
 	@Override
@@ -65,17 +62,9 @@ public final class StepConfig implements Cloneable, Comparable<StepConfig> {
 		return type;
 	}
 
-	public static String getLevelName(int level) {
-		return Options.getInstance().getDifficultyLevels()[level].getName();
-	}
-
 	public static String getLevelName(DifficultyLevel level) {
 		// return level.getName();
 		return Options.getInstance().getDifficultyLevels()[level.getOrdinal()].getName();
-	}
-
-	public void setType(SolutionType type) {
-		this.type = type;
 	}
 
 	public int getLevel() {
@@ -118,10 +107,6 @@ public final class StepConfig implements Cloneable, Comparable<StepConfig> {
 		this.category = category;
 	}
 
-	public String getCategoryName() {
-		return category.getCategoryName();
-	}
-
 	public int getIndex() {
 		return index;
 	}
@@ -130,33 +115,16 @@ public final class StepConfig implements Cloneable, Comparable<StepConfig> {
 		this.index = index;
 	}
 
-	@Override
-	public int compareTo(StepConfig o) {
-		return index - o.getIndex();
-	}
-
 	public boolean isAllStepsEnabled() {
 		return allStepsEnabled;
-	}
-
-	public void setAllStepsEnabled(boolean allStepsEnabled) {
-		this.allStepsEnabled = allStepsEnabled;
 	}
 
 	public int getIndexProgress() {
 		return indexProgress;
 	}
 
-	public void setIndexProgress(int indexProgress) {
-		this.indexProgress = indexProgress;
-	}
-
 	public boolean isEnabledProgress() {
 		return enabledProgress;
-	}
-
-	public void setEnabledProgress(boolean enabledProgress) {
-		this.enabledProgress = enabledProgress;
 	}
 
 	/**
@@ -166,10 +134,8 @@ public final class StepConfig implements Cloneable, Comparable<StepConfig> {
 		return enabledTraining;
 	}
 
-	/**
-	 * @param enabledTraining the enabledTraining to set
-	 */
-	public void setEnabledTraining(boolean enabledTraining) {
-		this.enabledTraining = enabledTraining;
+	@Override
+	public int compareTo(StepConfig o) {
+		return index - o.getIndex();
 	}
 }
