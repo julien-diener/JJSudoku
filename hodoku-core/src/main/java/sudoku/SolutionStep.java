@@ -660,24 +660,12 @@ public class SolutionStep implements Comparable<SolutionStep>, Cloneable {
 		return type.getStepName();
 	}
 
-	public static String getStepName(int type) {
-		return SolutionType.values()[type].getStepName();
-	}
-
 	public String getEntityName(int name) {
 		return entityNames[name];
 	}
 
 	public String getEntityShortName(int name) {
 		return entityShortNames[name];
-	}
-
-	public String getEntityName() {
-		return entityNames[entity];
-	}
-
-	public String getEntityName2() {
-		return entityNames[entity2];
 	}
 
 	public String getEntityShortName() {
@@ -692,17 +680,9 @@ public class SolutionStep implements Comparable<SolutionStep>, Cloneable {
 		}
 	}
 
-	public String getEntityShortName2() {
-		return entityShortNames[entity2];
-	}
-
 	@Override
 	public String toString() {
 		return toString(2);
-	}
-	
-	public boolean isGiveUp() {
-		return type == SolutionType.GIVE_UP;
 	}
 
 	/**

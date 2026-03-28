@@ -19,14 +19,46 @@ import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.jjgame.sudoku.CellIndex
+import org.jjgame.sudoku.CellState
+import org.jjgame.sudoku.SudokuCandidate
+import org.jjgame.sudoku.SudokuGameSession
+import org.jjgame.sudoku.SudokuCell
+import org.jjgame.sudoku.SudokuPuzzle
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 class GameFragment : Fragment() {
+
+    companion object {
+        private const val ARG_TRAINING_ASSET_PATH = "trainingAssetPath"
+        private const val ARG_TRAINING_TECHNIQUE_NAME = "trainingTechniqueName"
+
+        fun newTrainingInstance(
+            assetPath: String,
+            techniqueName: String,
+        ) = GameFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARG_TRAINING_ASSET_PATH, assetPath)
+                putString(ARG_TRAINING_TECHNIQUE_NAME, techniqueName)
+            }
+        }
+    }
+
+    private sealed class ScreenMode {
+        data object Normal : ScreenMode()
+
+        data class Training(
+            val assetPath: String,
+            val techniqueName: String,
+        ) : ScreenMode()
+    }
 
     private lateinit var boardView: SudokuBoardView
     private lateinit var findCandidates: Button
@@ -35,10 +67,15 @@ class GameFragment : Fragment() {
     private lateinit var errorText: TextView
     private lateinit var timerText: TextView
     private lateinit var btnHome: Button
+    private lateinit var btnClear: Button
     private lateinit var gameViewModel: SudokuGameViewModel
     private lateinit var digitButtons: List<Button>
+    private lateinit var mode: ScreenMode
 
     private var timerJob: Job? = null
+    private var trainingRecords: List<TrainingRecord> = emptyList()
+    private var trainingIndex = 0
+    private lateinit var trainingSession: SudokuGameSession
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,7 +95,9 @@ class GameFragment : Fragment() {
         errorText = view.findViewById(R.id.errorText)
         timerText = view.findViewById(R.id.timerText)
         btnHome = view.findViewById(R.id.btnHome)
+        btnClear = view.findViewById(R.id.btnClear)
         gameViewModel = ViewModelProvider(requireActivity())[SudokuGameViewModel::class.java]
+        mode = buildModeFromArgs()
 
         val digitIds = listOf(
             R.id.btn1, R.id.btn2, R.id.btn3,
@@ -70,13 +109,13 @@ class GameFragment : Fragment() {
         init()
 
         btnHome.setOnClickListener {
-            gameViewModel.persistGameSession()
+            persistIfNormal()
             parentFragmentManager.popBackStack()
         }
 
         findCandidates.setOnClickListener {
-            gameViewModel.gameSession.fastFillCandidate()
-            gameViewModel.persistGameSession()
+            currentSession().fastFillCandidate()
+            persistIfNormal()
             updateCandidatesUi()
             updateNumberButtonsUi()
             boardView.invalidate()
@@ -94,20 +133,22 @@ class GameFragment : Fragment() {
             }
         }
 
-        view.findViewById<Button>(R.id.btnClear).setOnClickListener {
+        btnClear.setOnClickListener {
             boardView.clearSelection()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        startTimer()
+        if (mode is ScreenMode.Normal) startTimer()
     }
 
     override fun onPause() {
         super.onPause()
-        stopTimer()
-        gameViewModel.persistGameSession()
+        if (mode is ScreenMode.Normal) {
+            stopTimer()
+            gameViewModel.persistGameSession()
+        }
     }
 
     private fun startTimer() {
@@ -127,6 +168,7 @@ class GameFragment : Fragment() {
     }
 
     private fun updateTimerUi() {
+        if (mode !is ScreenMode.Normal) return
         val totalSeconds = gameViewModel.gameSession.elapsedSeconds
         val minutes = totalSeconds / 60
         val seconds = totalSeconds % 60
@@ -134,6 +176,13 @@ class GameFragment : Fragment() {
     }
 
     private fun init() {
+        when (val m = mode) {
+            is ScreenMode.Normal -> initNormalMode()
+            is ScreenMode.Training -> initTrainingMode(m)
+        }
+    }
+
+    private fun initNormalMode() {
         boardView.init(gameViewModel.gameSession) {
             gameViewModel.persistGameSession()
             updateNumberButtonsUi()
@@ -150,13 +199,62 @@ class GameFragment : Fragment() {
             .replaceFirstChar { it.uppercase() }
     }
 
+    private fun initTrainingMode(training: ScreenMode.Training) {
+        stopTimer()
+        statusText.text = training.techniqueName
+        timerText.text = "Loading..."
+        errorText.text = "errors: 0"
+        setInteractiveEnabled(false)
+
+        val appCtx = requireContext().applicationContext
+        viewLifecycleOwner.lifecycleScope.launch {
+            val loaded = withContext(Dispatchers.IO) {
+                TrainingRepository.loadSetRecords(appCtx, training.assetPath).shuffled()
+            }
+            if (!isAdded) return@launch
+            trainingRecords = loaded
+            if (trainingRecords.isEmpty()) {
+                showNoSamplesDialog()
+                return@launch
+            }
+            loadTrainingPuzzle(0)
+        }
+    }
+
+    private fun loadTrainingPuzzle(index: Int) {
+        val training = mode as? ScreenMode.Training ?: return
+        val record = trainingRecords[index]
+        trainingIndex = index
+
+        val session = SudokuGameSession(
+            puzzle = buildPuzzleFromRecord(record),
+            candidates = SudokuCandidate(),
+        )
+        trainingSession = session
+        setInteractiveEnabled(true)
+
+        boardView.init(session) {
+            updateNumberButtonsUi()
+            updateErrorUi()
+            checkTrainingSuccess(session, record)
+        }
+        boardView.setEditCandidateMode(editCandidates.isSelected)
+        updateCandidatesUi()
+        updateEditCandidateToggleUi()
+        updateNumberButtonsUi()
+        updateErrorUi()
+        statusText.text = training.techniqueName
+        timerText.text = "${trainingIndex + 1}/${trainingRecords.size}"
+        boardView.invalidate()
+    }
+
     private fun updateCandidatesUi() {
         editCandidates.isEnabled = true
         boardView.setEditCandidateMode(editCandidates.isSelected)
     }
 
     private fun updateErrorUi() {
-        val count = gameViewModel.gameSession.errorCount
+        val count = currentSession().errorCount
         errorText.text = "errors: $count"
         errorText.setTextColor(
             when {
@@ -177,7 +275,7 @@ class GameFragment : Fragment() {
     }
 
     private fun updateNumberButtonsUi() {
-        val remainingByValue = gameViewModel.gameSession.puzzle.remainingCountsByValue()
+        val remainingByValue = currentSession().puzzle.remainingCountsByValue()
 
         digitButtons.forEachIndexed { index, button ->
             val value = index + 1
@@ -220,7 +318,7 @@ class GameFragment : Fragment() {
     }
 
     private fun autoSelectNextUnfinishedIfCurrentIsDone(remainingByValue: IntArray) {
-        val selected = gameViewModel.gameSession.selectedNumber ?: return
+        val selected = currentSession().selectedNumber ?: return
         if (remainingByValue[selected - 1] > 0) return
 
         // Continue from selected+1, wrap after 9, and pick the first unfinished value.
@@ -270,6 +368,98 @@ class GameFragment : Fragment() {
             .setNegativeButton("Home") { _, _ ->
                 parentFragmentManager.popBackStack()
             }
+            .setCancelable(false)
+            .show()
+    }
+
+    private fun currentSession(): SudokuGameSession {
+        return when (mode) {
+            is ScreenMode.Normal -> gameViewModel.gameSession
+            is ScreenMode.Training -> trainingSession
+        }
+    }
+
+    private fun setInteractiveEnabled(enabled: Boolean) {
+        boardView.isEnabled = enabled
+        findCandidates.isEnabled = enabled
+        editCandidates.isEnabled = enabled
+        btnClear.isEnabled = enabled
+        digitButtons.forEach { it.isEnabled = enabled }
+    }
+
+    private fun persistIfNormal() {
+        if (mode is ScreenMode.Normal) {
+            gameViewModel.persistGameSession()
+        }
+    }
+
+    private fun buildModeFromArgs(): ScreenMode {
+        val assetPath = arguments?.getString(ARG_TRAINING_ASSET_PATH)
+        if (assetPath.isNullOrBlank()) {
+            return ScreenMode.Normal
+        }
+        return ScreenMode.Training(
+            assetPath = assetPath,
+            techniqueName = arguments?.getString(ARG_TRAINING_TECHNIQUE_NAME) ?: "Training",
+        )
+    }
+
+    private fun buildPuzzleFromRecord(record: TrainingRecord): SudokuPuzzle {
+        val source = record.sourcePuzzle
+        val before = record.puzzleBeforeStep
+        val after = record.puzzleAfterStep
+
+        return SudokuPuzzle(Array(81) { idx ->
+            val sourceCh = source[idx]
+            val beforeCh = before[idx]
+            val afterCh = after[idx]
+
+            when {
+                sourceCh != '.' -> SudokuCell(value = sourceCh - '0', state = CellState.GIVEN)
+                beforeCh != '.' -> SudokuCell(value = beforeCh - '0', state = CellState.FOUND)
+                else -> {
+                    val trueValue = if (afterCh != '.') afterCh - '0' else 0
+                    SudokuCell(value = trueValue, state = CellState.NOT_FOUND)
+                }
+            }
+        })
+    }
+
+    private fun checkTrainingSuccess(session: SudokuGameSession, record: TrainingRecord) {
+        val targetCell = record.targetCell ?: return
+        val targetValue = record.targetValue ?: return
+        val cell = session.puzzle.cellAt(CellIndex(targetCell))
+        if (cell.state == CellState.FOUND && cell.value == targetValue) {
+            showTrainingSuccessDialog(record)
+        }
+    }
+
+    private fun showTrainingSuccessDialog(record: TrainingRecord) {
+        val hasNext = trainingIndex + 1 < trainingRecords.size
+        AlertDialog.Builder(requireContext())
+            .setTitle("✅ Correct!")
+            .setMessage(
+                "Well done!\n\n" +
+                        "Technique: ${record.solutionType.replace('_', ' ')}\n" +
+                        "Step: ${record.stepText}\n\n" +
+                        if (hasNext) "Ready for the next one?" else "You've completed all puzzles for this technique!",
+            )
+            .setPositiveButton(if (hasNext) "Next puzzle" else "Done") { _, _ ->
+                if (hasNext) loadTrainingPuzzle(trainingIndex + 1)
+                else parentFragmentManager.popBackStack()
+            }
+            .setNegativeButton("Back to techniques") { _, _ ->
+                parentFragmentManager.popBackStack()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+    private fun showNoSamplesDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("No puzzles available")
+            .setMessage("This technique has no SET-type training puzzles yet.\nTry another technique.")
+            .setPositiveButton("Back") { _, _ -> parentFragmentManager.popBackStack() }
             .setCancelable(false)
             .show()
     }

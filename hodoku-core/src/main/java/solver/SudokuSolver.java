@@ -565,10 +565,6 @@ public class SudokuSolver {
 		return score;
 	}
 
-	public String getLevelString() {
-		return StepConfig.getLevelName(level);
-	}
-
 	public DifficultyLevel getLevel() {
 		return level;
 	}

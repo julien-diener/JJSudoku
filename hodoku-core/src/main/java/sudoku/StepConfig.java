@@ -24,31 +24,29 @@ package sudoku;
  * @author hobiwan
  */
 public final class StepConfig implements Cloneable, Comparable<StepConfig> {
-	private int index; // search order when solving
-	private SolutionType type; // which step
-	private int level; // Index in Options.difficultyLevels
-	private SolutionCategory category; // which category (used for configuration)
-	private int baseScore; // score for every instance of step in solution
-	private int adminScore; // currently not used
-	private boolean enabled; // used in solution?
-	private boolean allStepsEnabled; // searched for when all steps are found?
-	private int indexProgress; // search order when rating the efficiency of steps
-	private boolean enabledProgress; // enabled when rating the efficiency of steps
-	private boolean enabledTraining; // enabled for traing/practising mode
+	private final int index; // search order when solving
+	private final SolutionType type; // which step
+	private final DifficultyType difficultyType; // Index in Options.difficultyLevels
+	private final SolutionCategory category; // which category (used for configuration)
+	private final int baseScore; // score for every instance of step in solution
+	private final int adminScore; // currently not used
+	private final boolean enabled; // used in solution?
+	private final boolean allStepsEnabled; // searched for when all steps are found?
+	private final boolean enabledProgress; // enabled when rating the efficiency of steps
+	private final boolean enabledTraining; // enabled for traing/practising mode
 
 	/** Creates a new instance of StepConfig */
-	public StepConfig(int index, SolutionType type, int level, SolutionCategory category, int baseScore, int adminScore,
-			boolean enabled, boolean allStepsEnabled, int indexProgress, boolean enabledProgress,
-			boolean enabledTraining) {
-		this.index = index;
-		this.type = type;
-		this.level = level;
+	public StepConfig(DifficultyType difficultyType, SolutionCategory category, SolutionType type, int index, int baseScore, int adminScore,
+					  boolean enabled, boolean allStepsEnabled, boolean enabledProgress,
+					  boolean enabledTraining) {
+		this.difficultyType = difficultyType;
 		this.category = category;
+		this.type = type;
+		this.index = index;
 		this.baseScore = baseScore;
 		this.adminScore = adminScore;
 		this.enabled = enabled;
 		this.allStepsEnabled = allStepsEnabled;
-		this.indexProgress = indexProgress;
 		this.enabledProgress = enabledProgress;
 		this.enabledTraining = enabledTraining;
 	}
@@ -62,65 +60,36 @@ public final class StepConfig implements Cloneable, Comparable<StepConfig> {
 		return type;
 	}
 
-	public static String getLevelName(DifficultyLevel level) {
-		// return level.getName();
-		return Options.getInstance().getDifficultyLevels()[level.getOrdinal()].getName();
+	public DifficultyType getDifficultyType() {
+		return difficultyType;
 	}
-
 	public int getLevel() {
-		return level;
-	}
-
-	public void setLevel(int level) {
-		this.level = level;
+		return difficultyType.ordinal();
 	}
 
 	public int getBaseScore() {
 		return baseScore;
 	}
 
-	public void setBaseScore(int baseScore) {
-		this.baseScore = baseScore;
-	}
-
 	public int getAdminScore() {
 		return adminScore;
-	}
-
-	public void setAdminScore(int adminScore) {
-		this.adminScore = adminScore;
 	}
 
 	public boolean isEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
 	public SolutionCategory getCategory() {
 		return category;
-	}
-
-	public void setCategory(SolutionCategory category) {
-		this.category = category;
 	}
 
 	public int getIndex() {
 		return index;
 	}
 
-	public void setIndex(int index) {
-		this.index = index;
-	}
 
 	public boolean isAllStepsEnabled() {
 		return allStepsEnabled;
-	}
-
-	public int getIndexProgress() {
-		return indexProgress;
 	}
 
 	public boolean isEnabledProgress() {

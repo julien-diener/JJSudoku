@@ -2,6 +2,8 @@ package org.jjgame.sudokuapp
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jjgame.sudoku.Difficulty
 import org.jjgame.sudoku.SudokuGameSession
 import org.jjgame.sudoku.SudokuGenerator
@@ -31,6 +33,15 @@ class SudokuGameViewModel(application: Application) : AndroidViewModel(applicati
     fun startGame(difficulty: Difficulty = currentDifficulty) {
         currentDifficulty = difficulty
         gameSession = SudokuGameSession(SudokuGenerator.generate(difficulty))
+        persistGameSession()
+    }
+
+    suspend fun startGameAsync(difficulty: Difficulty = currentDifficulty) {
+        val puzzle = withContext(Dispatchers.Default) {
+            SudokuGenerator.generate(difficulty)
+        }
+        currentDifficulty = difficulty
+        gameSession = SudokuGameSession(puzzle)
         persistGameSession()
     }
 

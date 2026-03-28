@@ -97,6 +97,7 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
 - [x] create a start/home page
   - create game here
   - offer to continue previous game if there is one in progress
+- [x] when finished, home should not show continue game. Maybe clear storage?
 - [ ] add a hint button to show one of the remaining numbers 
   - and be able to show it step by step
 - [x] add a timer, also keep in memory start and end time
@@ -106,7 +107,7 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
   - [ ] best time tracking
   - [ ] be able to replay it step by step?
 - [ ] add about page with features, how to play, maybe todo, license, author, etc.
-- [x] work on difficulty (with guaranteed unique solution, hard is too simple)
+- [x] work on difficulty (with guaranteed unique solution, hard is too simple) 
 - [ ] manage horizontal display
 - [ ] improve appearance
   - [ ] maybe add theme system, such as dark mode
@@ -117,11 +118,15 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
   - [ ] editable mode font color should be darker ("wood" brown) and font bold maybe
 - [ ] the clear button does nothing 
   - or remove clear button
-- [x] when finished, home should not show continue game. Maybe clear storage?
 - [ ] plug in github automatic build, with test coverage etc... if possible (and free)
 - [ ] add to google play store
 - [ ] convert hodoku core to kotlin
-
+- training
+  - [x] order techniques by difficulty level
+  - [ ] show not implemented training techniques
+  - [ ] for single, indicate which number should be placed
+  - [ ] for chain and coloring, indicate which candidates should be removed
+  - [x] use game fragment for training ?
 
 ## Publishing to Google Play Store
 

@@ -7,6 +7,9 @@ build/
 ### Local properties ###
 local.properties
 
+### Generated training dataset (re-generate with :hodoku-core:probeHintDataset) ###
+app/src/main/assets/training/
+
 ### IntelliJ IDEA ###
 .idea/
 .idea/modules.xml

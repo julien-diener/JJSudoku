@@ -381,7 +381,7 @@ public class BackgroundGeneratorThread implements Runnable {
 	 * @return
 	 */
 	private int getTrainingLevel() {
-		StepConfig[] conf = Options.getInstance().getOrgSolverSteps();
+		StepConfig[] conf = Options.DEFAULT_SOLVER_STEPS;
 		int level = -1;
 		for (StepConfig act : conf) {
 			if (act.isEnabledTraining()) {
