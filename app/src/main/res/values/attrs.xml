@@ -6,6 +6,8 @@
     <attr name="colorBoardErrorBg" format="color" />
     <attr name="colorBoardGridThin" format="color" />
     <attr name="colorBoardGridThick" format="color" />
+    <attr name="boardGridThinWidth" format="dimension" />
+    <attr name="boardGridThickWidth" format="dimension" />
     <attr name="colorDigitGiven" format="color" />
     <attr name="colorDigitFound" format="color" />
     <attr name="colorDigitError" format="color" />

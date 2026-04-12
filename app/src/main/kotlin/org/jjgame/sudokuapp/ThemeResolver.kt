@@ -11,5 +11,14 @@ object ThemeResolver {
             typedArray.recycle()
         }
     }
+
+    fun resolveDimension(context: Context, attrRes: Int, fallback: Float): Float {
+        val typedArray = context.theme.obtainStyledAttributes(intArrayOf(attrRes))
+        return try {
+            typedArray.getDimension(0, fallback)
+        } finally {
+            typedArray.recycle()
+        }
+    }
 }
 

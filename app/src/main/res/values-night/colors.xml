@@ -9,7 +9,7 @@
     <color name="theme_digit_given">#F2F4F7</color>
     <color name="theme_digit_found">#7CC4FF</color>
     <color name="theme_digit_error">#FF9B8E</color>
-    <color name="theme_candidate_default">#B7C2D0</color>
+    <color name="theme_candidate_default">#8A97A8</color>
     <color name="theme_candidate_edit">#FFB37A</color>
     <color name="theme_button_bg">#1F2933</color>
     <color name="theme_button_stroke">#344054</color>

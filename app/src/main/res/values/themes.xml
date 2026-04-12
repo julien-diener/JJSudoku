@@ -16,6 +16,8 @@
         <item name="colorBoardErrorBg">@color/theme_board_error_bg</item>
         <item name="colorBoardGridThin">@color/theme_board_grid_thin</item>
         <item name="colorBoardGridThick">@color/theme_board_grid_thick</item>
+        <item name="boardGridThinWidth">@dimen/theme_board_grid_thin_width</item>
+        <item name="boardGridThickWidth">@dimen/theme_board_grid_thick_width</item>
         <item name="colorDigitGiven">@color/theme_digit_given</item>
         <item name="colorDigitFound">@color/theme_digit_found</item>
         <item name="colorDigitError">@color/theme_digit_error</item>
