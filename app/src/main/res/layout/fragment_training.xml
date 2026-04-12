@@ -14,16 +14,18 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btnTrainingHome"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="🏠"
-            android:textSize="20sp"
+            android:scaleType="centerInside"
+            android:padding="4dp"
+            android:src="@drawable/ic_back_arrow"
             android:textColor="?attr/colorButtonText"
+            android:tint="?attr/colorButtonText"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:gravity="start|center_vertical" />
+            android:contentDescription="Back" />
 
         <TextView
             android:layout_width="0dp"

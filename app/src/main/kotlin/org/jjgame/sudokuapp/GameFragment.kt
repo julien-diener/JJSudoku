@@ -65,7 +65,7 @@ class GameFragment : Fragment() {
     private lateinit var statusText: TextView
     private lateinit var errorText: TextView
     private lateinit var timerText: TextView
-    private lateinit var btnHome: Button
+    private lateinit var btnHome: View
     private lateinit var btnThemeToggleGame: View
     private lateinit var gameViewModel: SudokuGameViewModel
     private lateinit var digitButtons: List<Button>
