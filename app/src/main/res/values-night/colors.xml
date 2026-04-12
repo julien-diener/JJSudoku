@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="theme_app_background">#101418</color>
+    <color name="theme_board_background">#182028</color>
+    <color name="theme_board_selected_bg">#3A4B5C</color>
+    <color name="theme_board_error_bg">#4A2627</color>
+    <color name="theme_board_grid_thin">#121624</color>
+    <color name="theme_board_grid_thick">#101418</color>
+    <color name="theme_digit_given">#F2F4F7</color>
+    <color name="theme_digit_found">#7CC4FF</color>
+    <color name="theme_digit_error">#FF9B8E</color>
+    <color name="theme_candidate_default">#B7C2D0</color>
+    <color name="theme_candidate_edit">#FFB37A</color>
+    <color name="theme_button_bg">#1F2933</color>
+    <color name="theme_button_stroke">#344054</color>
+    <color name="theme_button_text">#E4E7EC</color>
+    <color name="theme_secondary_text">#98A2B3</color>
+    <color name="theme_toggle_inactive">#98A2B3</color>
+    <color name="theme_toggle_active">#FFB37A</color>
+    <color name="theme_error_level_1">#F4D35E</color>
+    <color name="theme_error_level_2">#F29D38</color>
+    <color name="theme_error_level_3">#F97066</color>
+    <color name="theme_card_background">#182028</color>
+    <color name="theme_divider">#344054</color>
+    <color name="theme_technique_meta_text">#98A2B3</color>
+</resources>
+
+

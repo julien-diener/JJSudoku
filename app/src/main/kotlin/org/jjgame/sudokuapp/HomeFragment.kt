@@ -22,6 +22,7 @@ class HomeFragment : Fragment() {
     private lateinit var btnUnfair: Button
     private lateinit var btnExtreme: Button
     private lateinit var btnTraining: Button
+    private lateinit var btnThemeToggleHome: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +44,7 @@ class HomeFragment : Fragment() {
         btnUnfair  = view.findViewById(R.id.btnUnfair)
         btnExtreme = view.findViewById(R.id.btnExtreme)
         btnTraining = view.findViewById(R.id.btnTraining)
+        btnThemeToggleHome = view.findViewById(R.id.btnThemeToggleHome)
 
         // Show "Continue Game" button only if a saved game exists
         if (gameViewModel.hasSavedGame()) {
@@ -59,6 +61,7 @@ class HomeFragment : Fragment() {
         btnUnfair.setOnClickListener  { startNewGame(Difficulty.UNFAIR)  }
         btnExtreme.setOnClickListener { startNewGame(Difficulty.EXTREME) }
         btnTraining.setOnClickListener { navigateToTraining() }
+        btnThemeToggleHome.setOnClickListener { ThemeModeStorage.toggle(requireContext()) }
     }
 
     private fun startNewGame(difficulty: Difficulty) {

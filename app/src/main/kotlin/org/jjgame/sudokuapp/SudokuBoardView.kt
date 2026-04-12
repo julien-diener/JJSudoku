@@ -1,7 +1,6 @@
 package org.jjgame.sudokuapp
 
 import android.content.Context
-import androidx.core.content.ContextCompat
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
@@ -30,42 +29,39 @@ class SudokuBoardView @JvmOverloads constructor(
     }
 
     // ── Paints ────────────────────────────────────────────────────────────────
-    private val paintBackground = Paint().apply { color = ContextCompat.getColor(context, R.color.board_background) }
-    private val paintSelected   = Paint().apply { color = ContextCompat.getColor(context, R.color.board_selected_bg) }
-    private val paintError      = Paint().apply { color = ContextCompat.getColor(context, R.color.board_error_bg) }
+    private val paintBackground = Paint()
+    private val paintSelected   = Paint()
+    private val paintError      = Paint()
 
     private val paintThinLine = Paint().apply {
-        color = ContextCompat.getColor(context, R.color.board_grid_thin)
         strokeWidth = 1f
         style = Paint.Style.STROKE
     }
     private val paintThickLine = Paint().apply {
-        color = ContextCompat.getColor(context, R.color.board_grid_thick)
         strokeWidth = 4f
         style = Paint.Style.STROKE
     }
 
     private val paintGivenDigit = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.digit_given)
         textAlign = Paint.Align.CENTER
     }
     private val paintCandidateDigit = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.candidate_default)
         textAlign = Paint.Align.CENTER
     }
     private val paintCandidateEditDigit = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.candidate_edit)
         textAlign = Paint.Align.CENTER
         isFakeBoldText = true
     }
     private val paintUserDigit = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.digit_found)
         textAlign = Paint.Align.CENTER
     }
     private val paintErrorDigit = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.digit_error)
         textAlign = Paint.Align.CENTER
         isFakeBoldText = true
+    }
+
+    init {
+        applyThemeColors()
     }
 
     // ── Sizing ────────────────────────────────────────────────────────────────
@@ -220,6 +216,19 @@ class SudokuBoardView @JvmOverloads constructor(
                     (candidatePaint.descent() + candidatePaint.ascent()) / 2f
             canvas.drawText((i + 1).toString(), x, y, candidatePaint)
         }
+    }
+
+    private fun applyThemeColors() {
+        paintBackground.color = ThemeResolver.resolveColor(context, R.attr.colorBoardBackground)
+        paintSelected.color = ThemeResolver.resolveColor(context, R.attr.colorBoardSelectedBg)
+        paintError.color = ThemeResolver.resolveColor(context, R.attr.colorBoardErrorBg)
+        paintThinLine.color = ThemeResolver.resolveColor(context, R.attr.colorBoardGridThin)
+        paintThickLine.color = ThemeResolver.resolveColor(context, R.attr.colorBoardGridThick)
+        paintGivenDigit.color = ThemeResolver.resolveColor(context, R.attr.colorDigitGiven)
+        paintCandidateDigit.color = ThemeResolver.resolveColor(context, R.attr.colorCandidateDefault)
+        paintCandidateEditDigit.color = ThemeResolver.resolveColor(context, R.attr.colorCandidateEdit)
+        paintUserDigit.color = ThemeResolver.resolveColor(context, R.attr.colorDigitFound)
+        paintErrorDigit.color = ThemeResolver.resolveColor(context, R.attr.colorDigitError)
     }
 
 }

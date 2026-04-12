@@ -15,8 +15,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatImageButton
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -69,6 +67,7 @@ class GameFragment : Fragment() {
     private lateinit var timerText: TextView
     private lateinit var btnHome: Button
     private lateinit var btnClear: Button
+    private lateinit var btnThemeToggleGame: View
     private lateinit var gameViewModel: SudokuGameViewModel
     private lateinit var digitButtons: List<Button>
     private lateinit var mode: ScreenMode
@@ -97,6 +96,7 @@ class GameFragment : Fragment() {
         timerText = view.findViewById(R.id.timerText)
         btnHome = view.findViewById(R.id.btnHome)
         btnClear = view.findViewById(R.id.btnClear)
+        btnThemeToggleGame = view.findViewById(R.id.btnThemeToggleGame)
         gameViewModel = ViewModelProvider(requireActivity())[SudokuGameViewModel::class.java]
         mode = buildModeFromArgs()
 
@@ -112,6 +112,9 @@ class GameFragment : Fragment() {
         btnHome.setOnClickListener {
             persistIfNormal()
             parentFragmentManager.popBackStack()
+        }
+        btnThemeToggleGame.setOnClickListener {
+            ThemeModeStorage.toggle(requireContext())
         }
 
         findCandidates.setOnClickListener {
@@ -259,10 +262,10 @@ class GameFragment : Fragment() {
         errorText.text = "errors: $count"
         errorText.setTextColor(
             when {
-                count == 0 -> ContextCompat.getColor(requireContext(), R.color.secondary_text)
-                count == 1 -> "#F9A825".toColorInt()  // yellow
-                count == 2 -> "#EF6C00".toColorInt()  // orange
-                else       -> "#C62828".toColorInt()  // red
+                count == 0 -> ThemeResolver.resolveColor(requireContext(), R.attr.colorSecondaryText)
+                count == 1 -> ThemeResolver.resolveColor(requireContext(), R.attr.colorErrorLevel1)
+                count == 2 -> ThemeResolver.resolveColor(requireContext(), R.attr.colorErrorLevel2)
+                else       -> ThemeResolver.resolveColor(requireContext(), R.attr.colorErrorLevel3)
             }
         )
     }
@@ -271,9 +274,9 @@ class GameFragment : Fragment() {
         val active = editCandidates.isSelected
         editCandidates.imageTintList = ColorStateList.valueOf(
             if (active) {
-                ContextCompat.getColor(requireContext(), R.color.toggle_active)
+                ThemeResolver.resolveColor(requireContext(), R.attr.colorToggleActive)
             } else {
-                ContextCompat.getColor(requireContext(), R.color.toggle_inactive)
+                ThemeResolver.resolveColor(requireContext(), R.attr.colorToggleInactive)
             },
         )
         editCandidates.alpha = if (active) 1f else 0.7f
@@ -301,7 +304,7 @@ class GameFragment : Fragment() {
         val end = text.length
 
         spannable.setSpan(
-            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.secondary_text)),
+            ForegroundColorSpan(ThemeResolver.resolveColor(requireContext(), R.attr.colorSecondaryText)),
             secondLineStart,
             end,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,

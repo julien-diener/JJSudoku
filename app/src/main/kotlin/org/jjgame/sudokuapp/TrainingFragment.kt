@@ -24,6 +24,9 @@ class TrainingFragment : Fragment() {
         view.findViewById<View>(R.id.btnTrainingHome).setOnClickListener {
             parentFragmentManager.popBackStack()
         }
+        view.findViewById<View>(R.id.btnThemeToggleTraining).setOnClickListener {
+            ThemeModeStorage.toggle(requireContext())
+        }
 
         val recycler = view.findViewById<RecyclerView>(R.id.techniqueList)
         recycler.layoutManager = LinearLayoutManager(requireContext())

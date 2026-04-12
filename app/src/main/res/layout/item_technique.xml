@@ -4,14 +4,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="12dp"
-    android:background="@android:color/white">
+    android:background="?attr/colorCardBackground">
 
     <TextView
         android:id="@+id/textCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="11sp"
-        android:textColor="#888888"
+        android:textColor="?attr/colorSecondaryText"
         android:textAllCaps="true"
         android:letterSpacing="0.08"
         android:visibility="gone" />
@@ -28,14 +28,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="16sp"
-            android:textColor="#222222" />
+            android:textColor="?attr/colorDigitGiven" />
 
         <TextView
             android:id="@+id/textSampleCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
-            android:textColor="#999999" />
+            android:textColor="?attr/colorTechniqueMetaText" />
 
     </LinearLayout>
 

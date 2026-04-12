@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:padding="24dp"
-    android:background="#FAFAFA">
+    android:background="?attr/colorAppBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btnThemeToggleHome"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_theme_toggle"
+            android:tint="?attr/colorButtonText"
+            android:padding="6dp"
+            android:contentDescription="@string/theme_toggle_description" />
+    </LinearLayout>
 
     <!-- Title -->
     <TextView
@@ -14,17 +31,21 @@
         android:text="JJSudoku"
         android:textSize="48sp"
         android:textStyle="bold"
-        android:textColor="#333333"
-        android:layout_marginTop="32dp"
+        android:textColor="?attr/colorDigitGiven"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="48dp" />
 
     <!-- Continue Game Button (conditionally shown) -->
     <Button
         android:id="@+id/btnContinueGame"
         android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:text="Continue Game"
         android:textSize="16sp"
+        android:textColor="?attr/colorButtonText"
+        android:background="@drawable/bg_action_button"
+        android:backgroundTint="@null"
+        app:backgroundTint="@null"
         android:visibility="gone"
         android:layout_marginBottom="32dp" />
 
@@ -35,63 +56,87 @@
         android:text="New Game"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="#333333"
+        android:textColor="?attr/colorDigitGiven"
         android:layout_marginBottom="16dp" />
 
     <!-- Difficulty Buttons -->
     <Button
         android:id="@+id/btnEasy"
         android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:text="Easy"
         android:textSize="16sp"
+        android:textColor="?attr/colorButtonText"
+        android:background="@drawable/bg_action_button"
+        android:backgroundTint="@null"
+        app:backgroundTint="@null"
         android:layout_marginBottom="12dp" />
 
     <Button
         android:id="@+id/btnMedium"
         android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:text="Medium"
         android:textSize="16sp"
+        android:textColor="?attr/colorButtonText"
+        android:background="@drawable/bg_action_button"
+        android:backgroundTint="@null"
+        app:backgroundTint="@null"
         android:layout_marginBottom="12dp" />
 
     <Button
         android:id="@+id/btnHard"
         android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:text="Hard"
         android:textSize="16sp"
+        android:textColor="?attr/colorButtonText"
+        android:background="@drawable/bg_action_button"
+        android:backgroundTint="@null"
+        app:backgroundTint="@null"
         android:layout_marginBottom="12dp" />
 
     <Button
         android:id="@+id/btnUnfair"
         android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:text="Unfair"
         android:textSize="16sp"
+        android:textColor="?attr/colorButtonText"
+        android:background="@drawable/bg_action_button"
+        android:backgroundTint="@null"
+        app:backgroundTint="@null"
         android:layout_marginBottom="12dp" />
 
     <Button
         android:id="@+id/btnExtreme"
         android:layout_width="200dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:text="Extreme"
         android:textSize="16sp"
+        android:textColor="?attr/colorButtonText"
+        android:background="@drawable/bg_action_button"
+        android:backgroundTint="@null"
+        app:backgroundTint="@null"
         android:layout_marginBottom="32dp" />
 
     <!-- Divider -->
     <View
         android:layout_width="200dp"
         android:layout_height="1dp"
-        android:background="#DDDDDD"
+        android:background="?attr/colorDivider"
         android:layout_marginBottom="24dp" />
 
     <Button
         android:id="@+id/btnTraining"
         android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:text="🎓 Training"
+        android:layout_height="40dp"
+        android:text="🚧 Training 🚧"
         android:textSize="16sp"
+        android:textColor="?attr/colorButtonText"
+        android:background="@drawable/bg_action_button"
+        android:backgroundTint="@null"
+        app:backgroundTint="@null"
         android:layout_marginBottom="12dp" />
 
 </LinearLayout>

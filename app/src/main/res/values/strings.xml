@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">JJSudoku</string>
+    <string name="theme_toggle_symbol">◐</string>
+    <string name="theme_toggle_description">Toggle light/dark theme</string>
 </resources>
 

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FAFAFA">
+    android:background="?attr/colorAppBackground">
 
     <!-- Header row -->
     <LinearLayout
@@ -21,6 +21,7 @@
             android:layout_weight="1"
             android:text="🏠"
             android:textSize="20sp"
+            android:textColor="?attr/colorButtonText"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:gravity="start|center_vertical" />
 
@@ -31,14 +32,23 @@
             android:text="Training"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="#333333"
+            android:textColor="?attr/colorDigitGiven"
             android:gravity="center" />
 
         <!-- spacer to balance the home button -->
-        <View
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btnThemeToggleTraining"
             android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_theme_toggle"
+            android:tint="?attr/colorButtonText"
+            android:padding="6dp"
+            android:minWidth="40dp"
+            android:minHeight="40dp"
+            android:contentDescription="@string/theme_toggle_description"
+            android:scaleType="centerInside" />
 
     </LinearLayout>
 
@@ -47,7 +57,7 @@
         android:layout_height="wrap_content"
         android:text="Select a technique to practise:"
         android:textSize="14sp"
-        android:textColor="#666666"
+        android:textColor="?attr/colorSecondaryText"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingBottom="8dp" />

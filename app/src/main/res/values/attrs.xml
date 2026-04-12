@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorAppBackground" format="color" />
+    <attr name="colorBoardBackground" format="color" />
+    <attr name="colorBoardSelectedBg" format="color" />
+    <attr name="colorBoardErrorBg" format="color" />
+    <attr name="colorBoardGridThin" format="color" />
+    <attr name="colorBoardGridThick" format="color" />
+    <attr name="colorDigitGiven" format="color" />
+    <attr name="colorDigitFound" format="color" />
+    <attr name="colorDigitError" format="color" />
+    <attr name="colorCandidateDefault" format="color" />
+    <attr name="colorCandidateEdit" format="color" />
+    <attr name="colorButtonBg" format="color" />
+    <attr name="colorButtonStroke" format="color" />
+    <attr name="colorButtonText" format="color" />
+    <attr name="colorSecondaryText" format="color" />
+    <attr name="colorToggleInactive" format="color" />
+    <attr name="colorToggleActive" format="color" />
+    <attr name="colorErrorLevel1" format="color" />
+    <attr name="colorErrorLevel2" format="color" />
+    <attr name="colorErrorLevel3" format="color" />
+    <attr name="colorCardBackground" format="color" />
+    <attr name="colorDivider" format="color" />
+    <attr name="colorTechniqueMetaText" format="color" />
+</resources>
+
