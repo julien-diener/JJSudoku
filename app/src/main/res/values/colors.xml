@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="game_background">#F6F7F9</color>
+    <color name="board_background">#FFFFFF</color>
+    <color name="board_selected_bg">#D0D9E8</color>
+    <color name="board_error_bg">#FEE4E2</color>
+    <color name="board_grid_thin">#D0D5DD</color>
+    <color name="board_grid_thick">#667085</color>
+    <color name="digit_given">#111827</color>
+    <color name="digit_found">#1565C0</color>
+    <color name="digit_error">#B42318</color>
+    <color name="candidate_default">#475467</color>
+    <color name="candidate_edit">#7A2E0E</color>
+    <color name="digit_button_bg">#EAECF0</color>
+    <color name="digit_button_stroke">#C8CDD5</color>
+    <color name="digit_button_text">#344054</color>
+    <color name="secondary_text">#475467</color>
+    <color name="toggle_inactive">#475467</color>
+    <color name="toggle_active">#7A2E0E</color>
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>

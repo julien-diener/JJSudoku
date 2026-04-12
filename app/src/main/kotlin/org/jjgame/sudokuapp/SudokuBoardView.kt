@@ -1,9 +1,8 @@
 package org.jjgame.sudokuapp
 
 import android.content.Context
-import androidx.core.graphics.toColorInt
+import androidx.core.content.ContextCompat
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
@@ -31,39 +30,40 @@ class SudokuBoardView @JvmOverloads constructor(
     }
 
     // ── Paints ────────────────────────────────────────────────────────────────
-    private val paintBackground = Paint().apply { color = Color.WHITE }
-    private val paintSelected   = Paint().apply { color = "#ADD8E6".toColorInt() }  // light blue
-    private val paintError      = Paint().apply { color = "#FFCDD2".toColorInt() }  // light red
+    private val paintBackground = Paint().apply { color = ContextCompat.getColor(context, R.color.board_background) }
+    private val paintSelected   = Paint().apply { color = ContextCompat.getColor(context, R.color.board_selected_bg) }
+    private val paintError      = Paint().apply { color = ContextCompat.getColor(context, R.color.board_error_bg) }
 
     private val paintThinLine = Paint().apply {
-        color = Color.LTGRAY
+        color = ContextCompat.getColor(context, R.color.board_grid_thin)
         strokeWidth = 1f
         style = Paint.Style.STROKE
     }
     private val paintThickLine = Paint().apply {
-        color = Color.DKGRAY
+        color = ContextCompat.getColor(context, R.color.board_grid_thick)
         strokeWidth = 4f
         style = Paint.Style.STROKE
     }
 
     private val paintGivenDigit = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.BLACK
+        color = ContextCompat.getColor(context, R.color.digit_given)
         textAlign = Paint.Align.CENTER
     }
     private val paintCandidateDigit = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = paintGivenDigit.color
+        color = ContextCompat.getColor(context, R.color.candidate_default)
         textAlign = Paint.Align.CENTER
     }
     private val paintCandidateEditDigit = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = "#F57C00".toColorInt()
+        color = ContextCompat.getColor(context, R.color.candidate_edit)
         textAlign = Paint.Align.CENTER
+        isFakeBoldText = true
     }
     private val paintUserDigit = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = "#1565C0".toColorInt()  // dark blue
+        color = ContextCompat.getColor(context, R.color.digit_found)
         textAlign = Paint.Align.CENTER
     }
     private val paintErrorDigit = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = "#B71C1C".toColorInt()  // dark red
+        color = ContextCompat.getColor(context, R.color.digit_error)
         textAlign = Paint.Align.CENTER
         isFakeBoldText = true
     }

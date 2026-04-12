@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatImageButton
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -258,18 +259,22 @@ class GameFragment : Fragment() {
         errorText.text = "errors: $count"
         errorText.setTextColor(
             when {
-                count == 0 -> "#888888"
-                count == 1 -> "#F9A825"  // yellow
-                count == 2 -> "#EF6C00"  // orange
-                else       -> "#C62828"  // red
-            }.toColorInt()
+                count == 0 -> ContextCompat.getColor(requireContext(), R.color.secondary_text)
+                count == 1 -> "#F9A825".toColorInt()  // yellow
+                count == 2 -> "#EF6C00".toColorInt()  // orange
+                else       -> "#C62828".toColorInt()  // red
+            }
         )
     }
 
     private fun updateEditCandidateToggleUi() {
         val active = editCandidates.isSelected
         editCandidates.imageTintList = ColorStateList.valueOf(
-            if (active) "#FB8C00".toColorInt() else "#555555".toColorInt(),
+            if (active) {
+                ContextCompat.getColor(requireContext(), R.color.toggle_active)
+            } else {
+                ContextCompat.getColor(requireContext(), R.color.toggle_inactive)
+            },
         )
         editCandidates.alpha = if (active) 1f else 0.7f
     }
@@ -296,7 +301,7 @@ class GameFragment : Fragment() {
         val end = text.length
 
         spannable.setSpan(
-            ForegroundColorSpan("#666666".toColorInt()),
+            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.secondary_text)),
             secondLineStart,
             end,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
