@@ -175,22 +175,6 @@
     </GridLayout>
 
     <!-- Clear row -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="4dp">
-
-        <Button
-            android:id="@+id/btnClear"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="✕ Clear"
-            android:textColor="?attr/colorButtonText"
-            android:background="@drawable/bg_action_button"
-            android:backgroundTint="@null"
-            app:backgroundTint="@null" />
-    </LinearLayout>
 
 </LinearLayout>
 

@@ -66,7 +66,6 @@ class GameFragment : Fragment() {
     private lateinit var errorText: TextView
     private lateinit var timerText: TextView
     private lateinit var btnHome: Button
-    private lateinit var btnClear: Button
     private lateinit var btnThemeToggleGame: View
     private lateinit var gameViewModel: SudokuGameViewModel
     private lateinit var digitButtons: List<Button>
@@ -95,7 +94,6 @@ class GameFragment : Fragment() {
         errorText = view.findViewById(R.id.errorText)
         timerText = view.findViewById(R.id.timerText)
         btnHome = view.findViewById(R.id.btnHome)
-        btnClear = view.findViewById(R.id.btnClear)
         btnThemeToggleGame = view.findViewById(R.id.btnThemeToggleGame)
         gameViewModel = ViewModelProvider(requireActivity())[SudokuGameViewModel::class.java]
         mode = buildModeFromArgs()
@@ -113,6 +111,12 @@ class GameFragment : Fragment() {
             persistIfNormal()
             parentFragmentManager.popBackStack()
         }
+
+        // Clear selection when tapping the main layout background (empty space)
+        view.setOnClickListener {
+            boardView.clearSelection()
+        }
+
         btnThemeToggleGame.setOnClickListener {
             ThemeModeStorage.toggle(requireContext())
         }
@@ -137,9 +141,6 @@ class GameFragment : Fragment() {
             }
         }
 
-        btnClear.setOnClickListener {
-            boardView.clearSelection()
-        }
     }
 
     override fun onResume() {
@@ -391,7 +392,6 @@ class GameFragment : Fragment() {
         boardView.isEnabled = enabled
         findCandidates.isEnabled = enabled
         editCandidates.isEnabled = enabled
-        btnClear.isEnabled = enabled
         digitButtons.forEach { it.isEnabled = enabled }
     }
 

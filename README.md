@@ -103,9 +103,8 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
 - [x] add a timer, also keep in memory start and end time
 - [x] count errors and display them
 - [ ] keep all puzzle history in memory
-  - [ ] store time of start, end, time taken
+  - [ ] store time of start, end, time taken, Sudoku seed(?), difficulty
   - [ ] best time tracking
-  - [ ] be able to replay it step by step?
 - [ ] add about page with features, how to play, maybe todo, license, author, etc.
 - [x] work on difficulty (with guaranteed unique solution, hard is too simple) 
 - [ ] manage horizontal display
@@ -116,8 +115,7 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
   - [ ] have a brown theme for a more classic look
   - [ ] add some animations when placing numbers, winning, etc.?
   - [ ] editable mode font color should be darker ("wood" brown) and font bold maybe
-- [ ] the clear button does nothing 
-  - or remove clear button
+- [x] remove clear button
 - [ ] plug in github automatic build, with test coverage etc... if possible (and free)
 - [ ] add to google play store
 - [ ] convert hodoku core to kotlin
