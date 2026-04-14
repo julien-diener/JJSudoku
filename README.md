@@ -84,7 +84,20 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 ## License
 
-This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
+**This project is licensed under GNU General Public License v3.0 (GPL-3.0).**
+
+See [`LICENSE`](LICENSE) and [`COPYING`](COPYING) for full license text.
+
+### Why GPL-3.0?
+
+This project incorporates `hodoku-core`, which is derived from HoDoKu (GPL-3.0-or-later by Bernhard Hobiger).
+GPL-3.0 is a **copyleft license** that requires any derivative work to also be GPL-3.0.
+
+**Key implications:**
+- You may freely use, modify, and distribute this software
+- Any derivative work **must** also be GPL-3.0
+- Source code must be provided to end users
+- No warranty is provided (see COPYING for full terms)
 
 ## Roadmap
 
@@ -108,13 +121,7 @@ This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
 - [ ] add about page with features, how to play, maybe todo, license, author, etc.
 - [x] work on difficulty (with guaranteed unique solution, hard is too simple) 
 - [ ] manage horizontal display
-- [ ] improve appearance
-  - [ ] maybe add theme system, such as dark mode
-  - [ ] background color
-  - [ ] button color
-  - [ ] have a brown theme for a more classic look
-  - [ ] add some animations when placing numbers, winning, etc.?
-  - [ ] editable mode font color should be darker ("wood" brown) and font bold maybe
+- [x] improve appearance
 - [x] remove clear button
 - [ ] plug in github automatic build, with test coverage etc... if possible (and free)
 - [ ] add to google play store

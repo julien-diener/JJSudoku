@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="theme_board_grid_thin_width">1.6dp</dimen>
+    <dimen name="theme_board_grid_thick_width">3.5dp</dimen>
+</resources>
+

@@ -48,9 +48,19 @@ These stubs keep method signatures used by solver/generator code paths and are i
 
 ## Provenance and license
 
-- Upstream source: HoDoKu (Bernhard Hobiger), GPL-3.0-or-later
-- This module is derived work from HoDoKu source files.
-- Keep HoDoKu copyright and GPL notices in retained source files.
+- **Upstream source:** HoDoKu (Bernhard Hobiger), GPL-3.0-or-later
+- **This module:** Derived work from HoDoKu source files
+- **License:** GNU General Public License v3.0 or later (GPL-3.0+)
+- **Full text:** See `COPYING` file in this module or project root
+
+**Important:** All source files retain original HoDoKu copyright headers and GPL-3.0 notices.
+Any derivative work using hodoku-core must also be licensed under GPL-3.0 or compatible license.
+
+### License files
+
+- `hodoku-core/COPYING` — GPL-3.0 full text (for this module)
+- `PROJECT_ROOT/COPYING` — GPL-3.0 full text (for entire project)
+- `PROJECT_ROOT/LICENSE` — License summary
 
 ## Verification
 
